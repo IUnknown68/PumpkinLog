@@ -1,0 +1,11 @@
+HKCR
+{
+	NoRemove AppID
+	{
+		{0DECC4E9-B8E5-4980-B434-83C9C8E90E43} = s 'PumpkinLog'
+		'PumpkinLog.EXE'
+		{
+			val AppID = s {0DECC4E9-B8E5-4980-B434-83C9C8E90E43}
+		}
+	}
+}
