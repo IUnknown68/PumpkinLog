@@ -89,7 +89,7 @@ library PumpkinLogLib
   ]
   interface IServer : IDispatch
   {
-    [id(1), helpstring("method createLogger")] HRESULT createLogger([in] BSTR aName, [in, optional] VARIANT aWindowName, [out, retval] IDispatch ** aRetVal);
+    [id(1), helpstring("method createLogger")] HRESULT createLogger([in] BSTR aName, [in, optional] VARIANT aOptions, [out, retval] IDispatch ** aRetVal);
   };
 
   [
@@ -108,13 +108,26 @@ library PumpkinLogLib
   [
 	  object,
 	  uuid(CF69F643-A8D9-4155-8EA1-FB0EFD2985C5),
-	  helpstring("ILoggerInternal Interface"),
+	  helpstring("ILogBucket Interface"),
 	  pointer_default(unique)
   ]
-  interface ILoggerInternal : IUnknown
+  interface ILogBucket : IUnknown
   {
-    HRESULT addRefLogger([in] LPCWSTR aName);
-    HRESULT removeRefLogger([in] LPCWSTR aName);
+    ULONG addRefLogger([in] LPCWSTR aName);
+    ULONG removeRefLogger([in] LPCWSTR aName);
+    HRESULT onLoggerLog([in] LogFacility aFacility, [in] LPCWSTR aName, [in] SAFEARRAY * pVals);
+  };
+
+  [
+	  object,
+	  uuid(333DC537-4CF8-41DD-97AF-FF0618645148),
+	  helpstring("ILogBucket Interface"),
+	  pointer_default(unique)
+  ]
+  interface ILogBucketContainer : IUnknown
+  {
+    ULONG addRefLogger([in] LPCWSTR aName);
+    ULONG removeRefLogger([in] LPCWSTR aName);
     HRESULT onLoggerLog([in] LogFacility aFacility, [in] LPCWSTR aName, [in] SAFEARRAY * pVals);
   };
 
@@ -127,7 +140,9 @@ library PumpkinLogLib
   interface ILogServerInternal : IUnknown
   {
     HRESULT onLoggerQuit([in] BSTR aName);
-    HRESULT onWindowClose([in] BSTR aName);
+    //HRESULT onWindowClose([in] BSTR aName);
+    HRESULT getBucket([in] LPCWSTR aUri, [out, retval] ILogBucketContainer ** aRetVal);
+    HRESULT onBucketGone([in] LPCWSTR aUri);
   };
 
 

@@ -10,16 +10,12 @@ HRESULT LogWindow::FinalConstruct()
 
 void LogWindow::FinalRelease()
 {
-  // remove the window from the server
-  if (mServer) {
-    mServer->onWindowClose(CComBSTR(mName));
-  }
 }
 
 void LogWindow::OnFinalMessage(HWND)
 {
-  // Window destroyed, Release() it. Paired with AddRef() in OnCreate().
-  Release();
+  // window gone, release container, it will release us
+  mContainer.Release();
 }
 
 BOOL LogWindow::PreTranslateMessage(MSG* pMsg)
@@ -44,23 +40,13 @@ LRESULT LogWindow::OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/,
 	AddSimpleReBarBand(hWndCmdBar);
 	AddSimpleReBarBand(hWndToolBar, NULL, TRUE);
 
-#ifdef USE_HTML_LOGWINDOW
-  CString s, sm;
-  GetModuleFileName(_Module.GetResourceInstance(), sm.GetBuffer(_MAX_PATH), _MAX_PATH);
-  sm.ReleaseBuffer();
-  s.Format(_T("res://%s/log.html"), sm);
-  m_hWndClient = m_view.Create(m_hWnd, rcDefault, s, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_HSCROLL | WS_VSCROLL);
-#else
   m_hWndClient = m_view.Create(m_hWnd, rcDefault, NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_HSCROLL | WS_VSCROLL | ES_AUTOHSCROLL | ES_AUTOVSCROLL | ES_MULTILINE | ES_NOHIDESEL | ES_SAVESEL);
-#endif
 
 	UpdateLayout();
 	CMessageLoop* pLoop = _Module.GetMessageLoop();
 	ATLASSERT(pLoop != NULL);
 	pLoop->AddMessageFilter(this);
 
-  // keep COM object alive. Paired with Release() in OnFinalMessage().
-  AddRef();
   return 0;
 }
 
@@ -107,7 +93,7 @@ LRESULT LogWindow::OnCopy(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, 
   return 0;
 }
 
-HRESULT LogWindow::init(LPCWSTR aName, ILogServerInternal * aLogServer)
+HRESULT LogWindow::init(LPCWSTR aName, ILogBucketContainer * aContainer, ILogServerInternal * aLogServer)
 {
   mName = aName;
   mServer = aLogServer;
@@ -115,6 +101,9 @@ HRESULT LogWindow::init(LPCWSTR aName, ILogServerInternal * aLogServer)
   {
     return E_FAIL;
   }
+  // holding a ref to container keeps us alive, because container
+  // hold a ref to us
+  mContainer = aContainer;
   CStringW name;
   name.Format(_T("LogWindow - %s"), mName);
   SetWindowText(name);
@@ -125,32 +114,32 @@ HRESULT LogWindow::init(LPCWSTR aName, ILogServerInternal * aLogServer)
 
 //----------------------------------------------------------------------------
 //----------------------------------------------------------------------------
-// ILoggerInternal implementation
+// ILogBucket implementation
 
 //----------------------------------------------------------------------------
 //  addRefLogger
-STDMETHODIMP LogWindow::addRefLogger(LPCWSTR aName)
+STDMETHODIMP_(ULONG) LogWindow::addRefLogger(LPCWSTR aName)
 {
   ++mLoggerRefcount;
   CComSafeArray<VARIANT> ar(1);
   CStringW s;
-  s.Format(L"Client connected. Have %i clients now.", mLoggerRefcount);
+  s.Format(L"Client \"%s\" connected. Have %i clients now.", aName, mLoggerRefcount);
   ar[0] = s;
   m_view.Log(LT_INTERNAL, aName, ar);
-  return S_OK;
+  return mLoggerRefcount;
 }
 
 //----------------------------------------------------------------------------
 //  removeRefLogger
-STDMETHODIMP LogWindow::removeRefLogger(LPCWSTR aName)
+STDMETHODIMP_(ULONG) LogWindow::removeRefLogger(LPCWSTR aName)
 {
   --mLoggerRefcount;
   CComSafeArray<VARIANT> ar(1);
   CStringW s;
-  s.Format(L"Client disconnected. Have %i clients now.", mLoggerRefcount);
+  s.Format(L"Client \"%s\" disconnected. Have %i clients now.", aName, mLoggerRefcount);
   ar[0] = s;
   m_view.Log(LT_INTERNAL, aName, ar);
-  return S_OK;
+  return mLoggerRefcount;
 }
 
 //----------------------------------------------------------------------------

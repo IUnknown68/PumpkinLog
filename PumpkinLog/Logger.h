@@ -4,7 +4,6 @@
 #include "resource.h"       // main symbols
 
 #include "PumpkinLog.h"
-#include "CComObjectCachedEx.h"
 
 namespace PumpkinLog {
 
@@ -34,7 +33,8 @@ public:
 	HRESULT FinalConstruct();
 	void FinalRelease();
 
-  HRESULT init(LPCWSTR aName, ILoggerInternal * aDestination, ILogServerInternal * aLogServer);
+  HRESULT init(LPCWSTR aName, ILogServerInternal * aLogServer);
+  HRESULT setOptions(VARIANT aOptions);
 
 public:
   STDMETHOD(log)(SAFEARRAY* pVals);
@@ -63,8 +63,8 @@ public:
 
 private:
   HRESULT doLog(LogFacility aFacility, SAFEARRAY * pVals);
-  CComPtr<ILogServerInternal> mServer;
-  CComPtr<ILoggerInternal>    mLogDestination;
+  CComPtr<ILogServerInternal>   mServer;
+  CComPtr<ILogBucketContainer>  mLogDestination;
 
   CStringW  mName;
 };

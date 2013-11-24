@@ -44,21 +44,26 @@ public:
 	}
 
 public:
-  STDMETHOD(createLogger)(BSTR aName, VARIANT aWindowName, IDispatch ** aRetVal);
+  STDMETHOD(createLogger)(BSTR aName, VARIANT aOptions, IDispatch ** aRetVal);
 
   STDMETHOD(onLoggerQuit)(BSTR aName);
-  STDMETHOD(onWindowClose)(BSTR aName);
+  //STDMETHOD(onWindowClose)(BSTR aName);
+  STDMETHOD(getBucket)(LPCWSTR aUri, ILogBucketContainer ** aRetVal);
+  STDMETHOD(onBucketGone)(LPCWSTR aUri);
 
 private:
-  HRESULT getLogWindow(VARIANT aWindowName, ILoggerInternal ** aRetVal, BOOL aEnsureExists = FALSE);
+  //HRESULT getLogWindow(VARIANT aOptions, ILogBucket ** aRetVal, BOOL aEnsureExists = FALSE);
+  HRESULT createBucket(LPCWSTR aUri, CComPtr<ILogBucketContainer> & aRetVal);
 
   // Here we hold weak pointers because we don't want to influence the refcount.
   // It's safe to do so because Logger and LogWindow tells us before the kill themselfs.
   typedef std::unordered_map<std::wstring, PumpkinLog::Logger* > LoggerMap;
-  typedef std::unordered_map<std::wstring, PumpkinLog::LogWindow* > LogWindowMap;
+  //typedef std::unordered_map<std::wstring, PumpkinLog::LogWindow* > LogWindowMap;
+  typedef std::unordered_map<std::wstring, ILogBucketContainer* > LogBucketMap;
 
   LoggerMap mLoggers;
-  LogWindowMap mWindows;
+  //LogWindowMap mWindows;
+  LogBucketMap mBuckets;
 };
 
 OBJECT_ENTRY_AUTO(CLSID_Server, Server)

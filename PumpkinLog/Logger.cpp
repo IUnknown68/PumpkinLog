@@ -19,20 +19,41 @@ void Logger::FinalRelease()
   if (mLogDestination) {
     mLogDestination->removeRefLogger(mName);
   }
+  mLogDestination.Release();
   // remove the logger from the server
   if (mServer) {
     mServer->onLoggerQuit(CComBSTR(mName));
   }
 }
 
-HRESULT Logger::init(LPCWSTR aName, ILoggerInternal * aDestination, ILogServerInternal * aLogServer)
+HRESULT Logger::init(LPCWSTR aName, ILogServerInternal * aLogServer)
 {
   mName = aName;
   mServer = aLogServer;
-  mLogDestination = aDestination;
-  if (mLogDestination) {
-    mLogDestination->addRefLogger(mName);
+  return S_OK;
+}
+
+HRESULT Logger::setOptions(VARIANT aOptions)
+{
+  if (VT_EMPTY == aOptions.vt) {
+    return S_OK;
   }
+  EXPECT_(mServer);
+  CComPtr<ILogBucketContainer> container;
+  IF_FAILED_RET(mServer->getBucket(L"window://", &container));
+
+  if (mLogDestination.IsEqualObject(container)) {
+    // no change
+    return S_OK;
+  }
+
+  // cleanup old bucket
+  if (mLogDestination) {
+    mLogDestination->removeRefLogger(mName);
+  }
+
+  mLogDestination = container;
+  mLogDestination->addRefLogger(mName);
   return S_OK;
 }
 

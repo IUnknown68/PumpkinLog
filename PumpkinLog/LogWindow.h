@@ -3,7 +3,7 @@
 #pragma once
 #include "resource.h"       // main symbols
 #include "PumpkinLog.h"
-#include "CComObjectCachedEx.h"
+#include "LogBucket/Container.h"
 
 #include "LogViewRE.h"
 
@@ -15,7 +15,7 @@ class LogWindow :
   public CComObjectRootEx<CComSingleThreadModel>,
   public CFrameWindowImpl<LogWindow>,
   public CMessageFilter,
-  public ILoggerInternal
+  public ILogBucket
 {
 public:
   typedef CComObject<LogWindow>  _ComObject;
@@ -32,7 +32,7 @@ public:
   DECLARE_PROTECT_FINAL_CONSTRUCT()
 
   BEGIN_COM_MAP(LogWindow)
-    COM_INTERFACE_ENTRY(ILoggerInternal)
+    COM_INTERFACE_ENTRY(ILogBucket)
   END_COM_MAP()
 
   BEGIN_MSG_MAP(LogWindow)
@@ -50,7 +50,7 @@ public:
 	void PenultimateRelease();
   void FinalRelease();
 
-  HRESULT init(LPCWSTR aName, ILogServerInternal * aLogServer);
+  HRESULT init(LPCWSTR aName, ILogBucketContainer * aContainer, ILogServerInternal * aLogServer);
 
   LRESULT OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
   LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
@@ -61,8 +61,8 @@ public:
 	LRESULT OnFileSaveAs(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 	LRESULT OnCopy(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 public:
-  STDMETHOD(addRefLogger)(LPCWSTR aName);
-  STDMETHOD(removeRefLogger)(LPCWSTR aName);
+  STDMETHOD_(ULONG, addRefLogger)(LPCWSTR aName);
+  STDMETHOD_(ULONG, removeRefLogger)(LPCWSTR aName);
   STDMETHOD(onLoggerLog)(LogFacility aFacility, LPCWSTR aName, SAFEARRAY * pVals);
 
 private:
@@ -70,6 +70,7 @@ private:
 	CCommandBarCtrl m_CmdBar;
   LogView m_view;
   CComPtr<ILogServerInternal> mServer;
+  CComPtr<ILogBucketContainer> mContainer;
   CStringW  mName;
 };
 
