@@ -17,11 +17,19 @@ void Container::FinalRelease()
   }
 }
 
-HRESULT Container::init(LPCWSTR aName, ILogBucket * aTarget, ILogServerInternal * aLogServer)
+//----------------------------------------------------------------------------
+//  init
+STDMETHODIMP Container::init(LPCWSTR aUri, ILogBucket * aTarget, ILogServerInternal * aLogServer)
 {
-  mName = aName;
+  mName = aUri;
   mServer = aLogServer;
   mTarget = aTarget;
+
+  // init target
+  if (mTarget) {
+    IF_FAILED_RET(mTarget->init(aUri, this, aLogServer));
+  }
+
   return S_OK;
 }
 

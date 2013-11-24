@@ -19,10 +19,12 @@ STDMETHODIMP Server::createLogger(BSTR aName, VARIANT aOptions, IDispatch ** aRe
   auto it = mLoggers.find(aName);
   Logger * logger = NULL;
   if (it != mLoggers.end()) {
+    // logger found
     instance = it->second;
     logger = it->second;
   }
   else {
+    // not found, create new logger
     Logger::_ComObject * newLogger = NULL;
     HRESULT hr = Logger::_ComObject::CreateInstance(&newLogger);
     if (FAILED(hr)) {
@@ -30,17 +32,12 @@ STDMETHODIMP Server::createLogger(BSTR aName, VARIANT aOptions, IDispatch ** aRe
     }
     instance = newLogger;
     logger = newLogger;
-/*
-    CComPtr<ILogBucketContainer> logDestination;
-    hr = getBucket(aName, &logDestination.p);
-    //hr = getLogWindow(aOptions, &logDestination.p, TRUE);
-    if (FAILED(hr)) {
-      return hr;
-    }
-*/
+
+    // one-time init
     IF_FAILED_RET(logger->init(aName, this));
     mLoggers[aName] = logger;
   }
+  // set options: multiple times init
   IF_FAILED_RET(logger->setOptions(aOptions));
   (*aRetVal) = instance.Detach();
   return S_OK;
@@ -56,12 +53,12 @@ STDMETHODIMP Server::onLoggerQuit(BSTR aName)
 
 //----------------------------------------------------------------------------
 //  getBucket
-STDMETHODIMP Server::getBucket(LPCWSTR aUri, ILogBucketContainer ** aRetVal)
+STDMETHODIMP Server::getBucket(LPCWSTR aUri, ILogBucket ** aRetVal)
 {
   if (!aRetVal) {
     return E_POINTER;
   }
-  CComPtr<ILogBucketContainer> bucket;
+  CComPtr<ILogBucket> bucket;
   auto it = mBuckets.find(aUri);
   if (it == mBuckets.end()) {
     // not found, create
@@ -86,52 +83,30 @@ STDMETHODIMP Server::onBucketGone(LPCWSTR aUri)
   return S_OK;
 }
 
-/*
 //----------------------------------------------------------------------------
-//  onWindowClose
-STDMETHODIMP Server::onWindowClose(BSTR aName)
+//  createLogWindow
+HRESULT Server::createLogWindow(LPCWSTR aUri, CComPtr<ILogBucket> & aRetVal)
 {
-  mWindows.erase(aName);
+  // create container
+  Container::_ComObject * newContainer = NULL;
+  IF_FAILED_RET(Container::_ComObject::CreateInstance(&newContainer));
+  CComPtr<ILogBucket> containerOwner(newContainer);
+
+  // create target
+  LogWindow::_ComObject * newWindow = NULL;
+  IF_FAILED_RET(LogWindow::_ComObject::CreateInstance(&newWindow));
+  CComPtr<ILogBucket> windowOwner(newWindow);
+
+  // init container
+  IF_FAILED_RET(newContainer->init(aUri, windowOwner, this));
+
+  aRetVal = containerOwner;
   return S_OK;
 }
-*/
 
-/*
-HRESULT Server::getLogWindow(VARIANT aOptions, ILogBucket ** aRetVal, BOOL aEnsureExists)
-{
-  if (!aRetVal) {
-    return E_POINTER;
-  }
-
-  CComPtr<ILogBucket> instance;
-  CComVariant vtName;
-  vtName.ChangeType(VT_BSTR, &aOptions);
-  std::wstring name = (VT_BSTR == vtName.vt) ? vtName.bstrVal : L"";
-
-  auto it = mWindows.find(name);
-  if (it != mWindows.end()) {
-    instance = it->second;
-  }
-  else {
-    LogWindow::_ComObject * window = NULL;
-    HRESULT hr = LogWindow::_ComObject::CreateInstance(&window);
-    if (FAILED(hr)) {
-      return hr;
-    }
-    instance = window;
-
-    hr = window->init(name.c_str(), this);
-    if (FAILED(hr)) {
-      return hr;
-    }
-    mWindows[name] = window;
-  }
-  (*aRetVal) = instance.Detach();
-  return S_OK;
-}
-*/
-
-HRESULT Server::createBucket(LPCWSTR aUri, CComPtr<ILogBucketContainer> & aRetVal)
+//----------------------------------------------------------------------------
+//  createBucket
+HRESULT Server::createBucket(LPCWSTR aUri, CComPtr<ILogBucket> & aRetVal)
 {
   CComPtr<IUri> uri;
   IF_FAILED_RET(CreateUri(aUri, Uri_CREATE_CANONICALIZE, 0, &uri.p));
@@ -140,28 +115,11 @@ HRESULT Server::createBucket(LPCWSTR aUri, CComPtr<ILogBucketContainer> & aRetVa
   IF_FAILED_RET(uri->GetSchemeName(&scheme));
   if (scheme == L"window") {
     /////////////////////// WINDOW
-    // create container
-    Container::_ComObject * newContainer = NULL;
-    IF_FAILED_RET(Container::_ComObject::CreateInstance(&newContainer));
-    CComPtr<ILogBucketContainer> containerOwner(newContainer);
-
-
-    // create target
-    LogWindow::_ComObject * newWindow = NULL;
-    IF_FAILED_RET(LogWindow::_ComObject::CreateInstance(&newWindow));
-    CComPtr<ILogBucket> windowOwner(newWindow);
-
-    // init container
-    IF_FAILED_RET(newContainer->init(aUri, windowOwner, this));
-
-    // init window
-    IF_FAILED_RET(newWindow->init(aUri, containerOwner, this));
-
+    // create
+    IF_FAILED_RET(createLogWindow(aUri, aRetVal));
     // store
-    mBuckets[aUri] = containerOwner;
-    aRetVal = containerOwner;
+    mBuckets[aUri] = aRetVal;
     return S_OK;
-
     /////////////////////// WINDOW
   }
 

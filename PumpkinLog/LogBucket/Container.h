@@ -25,7 +25,7 @@ namespace LogBucket {
 
 class Container :
   public CComObjectRootEx<CComSingleThreadModel>,
-  public ILogBucketContainer
+  public ILogBucket
 {
 public:
   typedef CComObject<Container>  _ComObject;
@@ -37,15 +37,14 @@ public:
   DECLARE_PROTECT_FINAL_CONSTRUCT()
 
   BEGIN_COM_MAP(Container)
-    COM_INTERFACE_ENTRY(ILogBucketContainer)
+    COM_INTERFACE_ENTRY(ILogBucket)
   END_COM_MAP()
 
 public:
   HRESULT FinalConstruct();
   void FinalRelease();
-  HRESULT init(LPCWSTR aName, ILogBucket * aTarget, ILogServerInternal * aLogServer);
-
 public:
+  STDMETHOD(init)(LPCWSTR aUri, ILogBucket * aContainer, ILogServerInternal * aLogServer);
   STDMETHOD_(ULONG, addRefLogger)(LPCWSTR aName);
   STDMETHOD_(ULONG, removeRefLogger)(LPCWSTR aName);
   STDMETHOD(onLoggerLog)(LogFacility aFacility, LPCWSTR aName, SAFEARRAY * pVals);

@@ -7,6 +7,8 @@
 import "oaidl.idl";
 import "ocidl.idl";
 
+interface ILogServerInternal;
+
 [
 	object,
 	uuid(E034DA10-3781-40D4-8B3F-9A47700F3490),
@@ -113,19 +115,7 @@ library PumpkinLogLib
   ]
   interface ILogBucket : IUnknown
   {
-    ULONG addRefLogger([in] LPCWSTR aName);
-    ULONG removeRefLogger([in] LPCWSTR aName);
-    HRESULT onLoggerLog([in] LogFacility aFacility, [in] LPCWSTR aName, [in] SAFEARRAY * pVals);
-  };
-
-  [
-	  object,
-	  uuid(333DC537-4CF8-41DD-97AF-FF0618645148),
-	  helpstring("ILogBucket Interface"),
-	  pointer_default(unique)
-  ]
-  interface ILogBucketContainer : IUnknown
-  {
+    HRESULT init([in] LPCWSTR aUri, [in] ILogBucket * aContainer, [in] ILogServerInternal * aLogServer);
     ULONG addRefLogger([in] LPCWSTR aName);
     ULONG removeRefLogger([in] LPCWSTR aName);
     HRESULT onLoggerLog([in] LogFacility aFacility, [in] LPCWSTR aName, [in] SAFEARRAY * pVals);
@@ -140,8 +130,7 @@ library PumpkinLogLib
   interface ILogServerInternal : IUnknown
   {
     HRESULT onLoggerQuit([in] BSTR aName);
-    //HRESULT onWindowClose([in] BSTR aName);
-    HRESULT getBucket([in] LPCWSTR aUri, [out, retval] ILogBucketContainer ** aRetVal);
+    HRESULT getBucket([in] LPCWSTR aUri, [out, retval] ILogBucket ** aRetVal);
     HRESULT onBucketGone([in] LPCWSTR aUri);
   };
 

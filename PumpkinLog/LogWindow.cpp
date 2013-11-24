@@ -81,6 +81,13 @@ LRESULT LogWindow::OnFileClose(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCt
   return 0;
 }
 
+LRESULT LogWindow::OnExit(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+{
+  DestroyWindow();
+  ::PostQuitMessage(0);
+  return 0;
+}
+
 LRESULT LogWindow::OnFileSaveAs(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
 {
   m_view.SaveAs();
@@ -93,9 +100,16 @@ LRESULT LogWindow::OnCopy(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, 
   return 0;
 }
 
-HRESULT LogWindow::init(LPCWSTR aName, ILogBucketContainer * aContainer, ILogServerInternal * aLogServer)
+
+//----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
+// ILogBucket implementation
+
+//----------------------------------------------------------------------------
+//  init
+STDMETHODIMP LogWindow::init(LPCWSTR aUri, ILogBucket * aContainer, ILogServerInternal * aLogServer)
 {
-  mName = aName;
+  mName = aUri;
   mServer = aLogServer;
   if (!CreateEx())
   {
@@ -110,11 +124,6 @@ HRESULT LogWindow::init(LPCWSTR aName, ILogBucketContainer * aContainer, ILogSer
   ShowWindow(SW_SHOW);
   return S_OK;
 }
-
-
-//----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
-// ILogBucket implementation
 
 //----------------------------------------------------------------------------
 //  addRefLogger

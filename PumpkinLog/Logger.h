@@ -64,7 +64,7 @@ public:
 private:
   HRESULT doLog(LogFacility aFacility, SAFEARRAY * pVals);
   CComPtr<ILogServerInternal>   mServer;
-  CComPtr<ILogBucketContainer>  mLogDestination;
+  CComPtr<ILogBucket>  mLogDestination;
 
   CStringW  mName;
 };

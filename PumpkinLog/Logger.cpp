@@ -39,8 +39,17 @@ HRESULT Logger::setOptions(VARIANT aOptions)
     return S_OK;
   }
   EXPECT_(mServer);
-  CComPtr<ILogBucketContainer> container;
-  IF_FAILED_RET(mServer->getBucket(L"window://", &container));
+  CStringW bucketUri;
+  CComVariant vtOptions;
+  HRESULT hr = vtOptions.ChangeType(VT_BSTR, &aOptions);
+  if (SUCCEEDED(hr)) {
+    bucketUri = vtOptions.bstrVal;
+  }
+  else {
+    bucketUri = L"window://Default";
+  }
+  CComPtr<ILogBucket> container;
+  IF_FAILED_RET(mServer->getBucket(bucketUri, &container));
 
   if (mLogDestination.IsEqualObject(container)) {
     // no change
@@ -54,6 +63,7 @@ HRESULT Logger::setOptions(VARIANT aOptions)
 
   mLogDestination = container;
   mLogDestination->addRefLogger(mName);
+
   return S_OK;
 }
 

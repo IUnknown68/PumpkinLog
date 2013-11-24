@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Sun Nov 24 15:04:55 2013
+/* at Sun Nov 24 15:34:43 2013
  */
 /* Compiler settings for PumpkinLog.idl:
     Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 7.00.0555 
@@ -69,12 +69,6 @@ typedef interface ILogBucket ILogBucket;
 #endif 	/* __ILogBucket_FWD_DEFINED__ */
 
 
-#ifndef __ILogBucketContainer_FWD_DEFINED__
-#define __ILogBucketContainer_FWD_DEFINED__
-typedef interface ILogBucketContainer ILogBucketContainer;
-#endif 	/* __ILogBucketContainer_FWD_DEFINED__ */
-
-
 #ifndef __ILogServerInternal_FWD_DEFINED__
 #define __ILogServerInternal_FWD_DEFINED__
 typedef interface ILogServerInternal ILogServerInternal;
@@ -113,6 +107,15 @@ typedef struct Logger Logger;
 extern "C"{
 #endif 
 
+
+/* interface __MIDL_itf_PumpkinLog_0000_0000 */
+/* [local] */ 
+
+
+
+
+extern RPC_IF_HANDLE __MIDL_itf_PumpkinLog_0000_0000_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_PumpkinLog_0000_0000_v0_0_s_ifspec;
 
 #ifndef __ILoggerDispatch_INTERFACE_DEFINED__
 #define __ILoggerDispatch_INTERFACE_DEFINED__
@@ -684,6 +687,11 @@ EXTERN_C const IID IID_ILogBucket;
     ILogBucket : public IUnknown
     {
     public:
+        virtual HRESULT STDMETHODCALLTYPE init( 
+            /* [in] */ LPCWSTR aUri,
+            /* [in] */ ILogBucket *aContainer,
+            /* [in] */ ILogServerInternal *aLogServer) = 0;
+        
         virtual ULONG STDMETHODCALLTYPE addRefLogger( 
             /* [in] */ LPCWSTR aName) = 0;
         
@@ -714,6 +722,12 @@ EXTERN_C const IID IID_ILogBucket;
         
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ILogBucket * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *init )( 
+            ILogBucket * This,
+            /* [in] */ LPCWSTR aUri,
+            /* [in] */ ILogBucket *aContainer,
+            /* [in] */ ILogServerInternal *aLogServer);
         
         ULONG ( STDMETHODCALLTYPE *addRefLogger )( 
             ILogBucket * This,
@@ -752,6 +766,9 @@ EXTERN_C const IID IID_ILogBucket;
     ( (This)->lpVtbl -> Release(This) ) 
 
 
+#define ILogBucket_init(This,aUri,aContainer,aLogServer)	\
+    ( (This)->lpVtbl -> init(This,aUri,aContainer,aLogServer) ) 
+
 #define ILogBucket_addRefLogger(This,aName)	\
     ( (This)->lpVtbl -> addRefLogger(This,aName) ) 
 
@@ -770,109 +787,6 @@ EXTERN_C const IID IID_ILogBucket;
 
 
 #endif 	/* __ILogBucket_INTERFACE_DEFINED__ */
-
-
-#ifndef __ILogBucketContainer_INTERFACE_DEFINED__
-#define __ILogBucketContainer_INTERFACE_DEFINED__
-
-/* interface ILogBucketContainer */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_ILogBucketContainer;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("333DC537-4CF8-41DD-97AF-FF0618645148")
-    ILogBucketContainer : public IUnknown
-    {
-    public:
-        virtual ULONG STDMETHODCALLTYPE addRefLogger( 
-            /* [in] */ LPCWSTR aName) = 0;
-        
-        virtual ULONG STDMETHODCALLTYPE removeRefLogger( 
-            /* [in] */ LPCWSTR aName) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE onLoggerLog( 
-            /* [in] */ LogFacility aFacility,
-            /* [in] */ LPCWSTR aName,
-            /* [in] */ SAFEARRAY *pVals) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct ILogBucketContainerVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            ILogBucketContainer * This,
-            /* [in] */ REFIID riid,
-            /* [annotation][iid_is][out] */ 
-            __RPC__deref_out  void **ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            ILogBucketContainer * This);
-        
-        ULONG ( STDMETHODCALLTYPE *Release )( 
-            ILogBucketContainer * This);
-        
-        ULONG ( STDMETHODCALLTYPE *addRefLogger )( 
-            ILogBucketContainer * This,
-            /* [in] */ LPCWSTR aName);
-        
-        ULONG ( STDMETHODCALLTYPE *removeRefLogger )( 
-            ILogBucketContainer * This,
-            /* [in] */ LPCWSTR aName);
-        
-        HRESULT ( STDMETHODCALLTYPE *onLoggerLog )( 
-            ILogBucketContainer * This,
-            /* [in] */ LogFacility aFacility,
-            /* [in] */ LPCWSTR aName,
-            /* [in] */ SAFEARRAY *pVals);
-        
-        END_INTERFACE
-    } ILogBucketContainerVtbl;
-
-    interface ILogBucketContainer
-    {
-        CONST_VTBL struct ILogBucketContainerVtbl *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define ILogBucketContainer_QueryInterface(This,riid,ppvObject)	\
-    ( (This)->lpVtbl -> QueryInterface(This,riid,ppvObject) ) 
-
-#define ILogBucketContainer_AddRef(This)	\
-    ( (This)->lpVtbl -> AddRef(This) ) 
-
-#define ILogBucketContainer_Release(This)	\
-    ( (This)->lpVtbl -> Release(This) ) 
-
-
-#define ILogBucketContainer_addRefLogger(This,aName)	\
-    ( (This)->lpVtbl -> addRefLogger(This,aName) ) 
-
-#define ILogBucketContainer_removeRefLogger(This,aName)	\
-    ( (This)->lpVtbl -> removeRefLogger(This,aName) ) 
-
-#define ILogBucketContainer_onLoggerLog(This,aFacility,aName,pVals)	\
-    ( (This)->lpVtbl -> onLoggerLog(This,aFacility,aName,pVals) ) 
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-
-#endif 	/* __ILogBucketContainer_INTERFACE_DEFINED__ */
 
 
 #ifndef __ILogServerInternal_INTERFACE_DEFINED__
@@ -895,7 +809,7 @@ EXTERN_C const IID IID_ILogServerInternal;
         
         virtual HRESULT STDMETHODCALLTYPE getBucket( 
             /* [in] */ LPCWSTR aUri,
-            /* [retval][out] */ ILogBucketContainer **aRetVal) = 0;
+            /* [retval][out] */ ILogBucket **aRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE onBucketGone( 
             /* [in] */ LPCWSTR aUri) = 0;
@@ -927,7 +841,7 @@ EXTERN_C const IID IID_ILogServerInternal;
         HRESULT ( STDMETHODCALLTYPE *getBucket )( 
             ILogServerInternal * This,
             /* [in] */ LPCWSTR aUri,
-            /* [retval][out] */ ILogBucketContainer **aRetVal);
+            /* [retval][out] */ ILogBucket **aRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *onBucketGone )( 
             ILogServerInternal * This,
