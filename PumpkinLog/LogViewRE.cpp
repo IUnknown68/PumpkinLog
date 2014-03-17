@@ -1,5 +1,4 @@
 #include "StdAfx.h"
-#include <atlfile.h>
 #include "LogViewRE.h"
 
 #define LOG_BGCOLOR         0x00ffffff

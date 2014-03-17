@@ -16,10 +16,11 @@ HRESULT Logger::FinalConstruct()
 
 void Logger::FinalRelease()
 {
-  if (mLogDestination) {
-    mLogDestination->removeRefLogger(mName);
+  for (auto it = mBuckets.begin(); it != mBuckets.end(); ++it) {
+    it->second->removeRefLogger(mName);
   }
-  mLogDestination.Release();
+  mBuckets.clear();
+
   // remove the logger from the server
   if (mServer) {
     mServer->onLoggerQuit(CComBSTR(mName));
@@ -38,7 +39,8 @@ HRESULT Logger::setOptions(VARIANT aOptions)
   if (VT_EMPTY == aOptions.vt) {
     return S_OK;
   }
-  EXPECT_(mServer);
+  EXPECTED_(mServer);
+/*
   CStringW bucketUri;
   CComVariant vtOptions;
   HRESULT hr = vtOptions.ChangeType(VT_BSTR, &aOptions);
@@ -63,7 +65,25 @@ HRESULT Logger::setOptions(VARIANT aOptions)
 
   mLogDestination = container;
   mLogDestination->addRefLogger(mName);
-
+*/
+  LPCWSTR bucketURIs[] = {
+    L"file://U:\\Users\\Hans\\Documents\\Visual Studio 2010\\Projects\\PumpkinLog\\test.log",
+    L"window://Default"
+  };
+  LogBucketMap newBuckets;
+  for (int n = 0; n < 2; n++) {
+    auto it = mBuckets.find(bucketURIs[n]);
+    if (it == mBuckets.end()) {
+      CComPtr<ILogBucket> container;
+      IF_FAILED_RET(mServer->getBucket(bucketURIs[n], &container));
+      newBuckets[bucketURIs[n]] = container;
+      container->addRefLogger(mName);
+    }
+    else {
+      newBuckets[bucketURIs[n]] = it->second;
+    }
+  }
+  mBuckets = newBuckets;
   return S_OK;
 }
 
@@ -284,7 +304,10 @@ STDMETHODIMP Logger::error3(
 //  log
 HRESULT Logger::doLog(LogFacility aFacility, SAFEARRAY * pVals)
 {
-  return (mLogDestination) ? mLogDestination->onLoggerLog(aFacility, mName, pVals) : E_UNEXPECTED;
+  for (auto it = mBuckets.begin(); it != mBuckets.end(); ++it) {
+    it->second->onLoggerLog(aFacility, mName, pVals);
+  }
+  return S_OK;
 }
 
 } // namespace PumpkinLog

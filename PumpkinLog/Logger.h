@@ -2,6 +2,7 @@
 
 #pragma once
 #include "resource.h"       // main symbols
+#include <map>
 
 #include "PumpkinLog.h"
 
@@ -63,8 +64,13 @@ public:
 
 private:
   HRESULT doLog(LogFacility aFacility, SAFEARRAY * pVals);
+
+private:
+  typedef std::map<std::wstring, CComPtr<ILogBucket> > LogBucketMap;
+
+private:
   CComPtr<ILogServerInternal>   mServer;
-  CComPtr<ILogBucket>  mLogDestination;
+  LogBucketMap  mBuckets;
 
   CStringW  mName;
 };

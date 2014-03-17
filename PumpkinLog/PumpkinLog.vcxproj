@@ -123,6 +123,7 @@
   <ItemGroup>
     <ClCompile Include="AboutDlg.cpp" />
     <ClCompile Include="LogBucket\Container.cpp" />
+    <ClCompile Include="LogBucket\FileBucket.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="PumpkinLog.cpp" />
     <ClCompile Include="Server.cpp" />
@@ -137,6 +138,7 @@
     <ClInclude Include="AboutDlg.h" />
     <ClInclude Include="ComPtr.h" />
     <ClInclude Include="LogBucket\Container.h" />
+    <ClInclude Include="LogBucket\FileBucket.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Server.h" />
     <ClInclude Include="LogViewRE.h" />

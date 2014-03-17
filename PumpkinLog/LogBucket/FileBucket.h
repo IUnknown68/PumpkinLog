@@ -7,20 +7,20 @@
 namespace PumpkinLog {
 namespace LogBucket {
 
-class Container :
+class FileBucket :
   public CComObjectRootEx<CComSingleThreadModel>,
   public ILogBucket
 {
 public:
-  typedef CComObject<Container>  _ComObject;
+  typedef CComObject<FileBucket>  _ComObject;
 
-  Container()
+  FileBucket()
   {
   }
 
   DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-  BEGIN_COM_MAP(Container)
+  BEGIN_COM_MAP(FileBucket)
     COM_INTERFACE_ENTRY(ILogBucket)
   END_COM_MAP()
 
@@ -35,8 +35,7 @@ public:
 
 private:
   CStringW  mName;
-  CComPtr<ILogServerInternal> mServer;
-  CComPtr<ILogBucket> mTarget;
+  CAtlFile  mFile;
 };
 
 } // namespace LogBucket

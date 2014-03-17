@@ -35,6 +35,7 @@ CExeModule
 #include <atldlgs.h>
 #include <atltime.h>
 #include <atlsafe.h>
+#include <atlfile.h>
 #include <Urlmon.h>
 
 #if defined _M_IX86
@@ -89,7 +90,7 @@ CExeModule
 #define ENSURE_RETVAL(_val) \
   if (!_val) return E_POINTER;
 
-#define EXPECT_(_val) \
+#define EXPECTED_(_val) \
   if (!_val) { \
     return E_UNEXPECTED; \
   }

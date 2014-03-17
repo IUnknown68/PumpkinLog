@@ -7,7 +7,6 @@
 #include "resource.h"       // main symbols
 #include "PumpkinLog.h"
 #include "Logger.h"
-#include "LogWindow.h"
 
 // Server
 
@@ -51,18 +50,56 @@ public:
   STDMETHOD(onBucketGone)(LPCWSTR aUri);
 
 private:
+  typedef HRESULT (Server::*TCreateScheme)();
+
+  HRESULT CreateScheme_window() {
+    return S_OK;
+  }
+
+  HRESULT CreateScheme_xml() {
+    return S_OK;
+  }
+
+  HRESULT CreateScheme__default() {
+    return S_OK;
+  }
+
+  struct SchemeEntry
+  {
+    LPCWSTR name;
+    TCreateScheme CreateScheme;
+  };
+
+  TCreateScheme GetScheme(LPCWSTR aScheme) {
+    static SchemeEntry schemes[] =
+    {
+      {L"xml", &Server::CreateScheme_xml},
+      {L"window", &Server::CreateScheme_window},
+      {NULL, NULL}
+    };
+    
+    for (SchemeEntry * entry = schemes; entry->CreateScheme; entry++) {
+      if (!entry->name) {
+        // last entry, default handler
+      }
+      if (0 == wcscmp(entry->name, aScheme)) {
+        return entry->CreateScheme;
+      }
+    }
+    return &Server::CreateScheme__default;
+  }
+
   HRESULT createLogWindow(LPCWSTR aUri, CComPtr<ILogBucket> & aRetVal);
+  HRESULT createLogFile(LPCWSTR aUri, CComPtr<ILogBucket> & aRetVal);
 
   HRESULT createBucket(LPCWSTR aUri, CComPtr<ILogBucket> & aRetVal);
 
   // Here we hold weak pointers because we don't want to influence the refcount.
-  // It's safe to do so because Logger and LogWindow tells us before the kill themselfs.
+  // It's safe to do so because Logger and LogWindow tells us before they commit suicide.
   typedef std::unordered_map<std::wstring, PumpkinLog::Logger* > LoggerMap;
-  //typedef std::unordered_map<std::wstring, PumpkinLog::LogWindow* > LogWindowMap;
   typedef std::unordered_map<std::wstring, ILogBucket* > LogBucketMap;
 
   LoggerMap mLoggers;
-  //LogWindowMap mWindows;
   LogBucketMap mBuckets;
 };
 

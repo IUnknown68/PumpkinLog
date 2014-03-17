@@ -51,6 +51,9 @@
     <ClCompile Include="LogBucket\Container.cpp">
       <Filter>PumpkinLog\LogBucket\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LogBucket\FileBucket.cpp">
+      <Filter>PumpkinLog\LogBucket\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -78,6 +81,9 @@
       <Filter>PumpkinLog\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LogBucket\Container.h">
+      <Filter>PumpkinLog\LogBucket\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LogBucket\FileBucket.h">
       <Filter>PumpkinLog\LogBucket\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
