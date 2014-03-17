@@ -16,41 +16,16 @@ namespace PumpkinLog {
 
 using namespace LogBucket;
 
-STDMETHODIMP Server::createLogger(BSTR aName, VARIANT aOptions, IDispatch ** aRetVal)
+STDMETHODIMP Server::createLogger(BSTR aName, SAFEARRAY* pVals, IDispatch ** aRetVal)
 {
   if (!aRetVal) {
     return E_POINTER;
   }
 
-  // Get the scheme name.
-  // Basic part of every configuration is a URI. It provides the follwing information:
-  // 1) Scheme
-  //    
-
-  CComBSTR schemeName;
-  HRESULT hr = E_FAIL;
-  CComPtr<IUri> uri;
-  if (VT_BSTR == aOptions.vt) {
-    // parse URI
-    hr = CreateUri(aOptions.bstrVal, CREATE_URI_FLAGS, 0, &uri);
-    if (FAILED(hr)) {
-      return hr;
-    }
-    // get scheme
-    hr = uri->GetSchemeName(&schemeName);
-    if (FAILED(hr)) {
-      return hr;
-    }
-  }
-
-  // handle scheme
-  TCreateScheme CreateScheme = GetSchemeCreator(schemeName);
-  hr = (*this.*CreateScheme)(uri);
-
-
   CComPtr<IDispatch> instance;
+  std::wstring name = aName;
 
-  auto it = mLoggers.find(aName);
+  auto it = mLoggers.find(name);
   Logger * logger = NULL;
   if (it != mLoggers.end()) {
     // logger found
@@ -69,10 +44,10 @@ STDMETHODIMP Server::createLogger(BSTR aName, VARIANT aOptions, IDispatch ** aRe
 
     // one-time init
     IF_FAILED_RET(logger->init(aName, this));
-    mLoggers[aName] = logger;
+    // set options: only one time!
+    IF_FAILED_RET(logger->setOptions(pVals));
+    mLoggers[name] = logger;
   }
-  // set options: multiple times init
-  IF_FAILED_RET(logger->setOptions(aOptions));
   (*aRetVal) = instance.Detach();
   return S_OK;
 }
@@ -96,7 +71,30 @@ STDMETHODIMP Server::getBucket(LPCWSTR aUri, ILogBucket ** aRetVal)
   auto it = mBuckets.find(aUri);
   if (it == mBuckets.end()) {
     // not found, create
-    HRESULT hr = createBucket(aUri, bucket);
+    // Get the scheme name.
+    // Basic part of every configuration is a URI. It provides the follwing information:
+    // 1) Scheme
+    //    
+
+    CComBSTR schemeName;
+    HRESULT hr = E_FAIL;
+    CComPtr<IUri> uri;
+    if (aUri) {
+      // parse URI
+      hr = CreateUri(aUri, CREATE_URI_FLAGS, 0, &uri);
+      if (FAILED(hr)) {
+        return hr;
+      }
+      // get scheme
+      hr = uri->GetSchemeName(&schemeName);
+      if (FAILED(hr)) {
+        return hr;
+      }
+    }
+
+    // handle scheme
+    TCreateLogBucket CreateLogBucket = GetLogBucketCreator(schemeName);
+    hr = (*this.*CreateLogBucket)(aUri, bucket);
     if (FAILED(hr)) {
       return hr;
     }
@@ -118,9 +116,8 @@ STDMETHODIMP Server::onBucketGone(LPCWSTR aUri)
 }
 
 //----------------------------------------------------------------------------
-//  createLogWindow
-HRESULT Server::createLogWindow(LPCWSTR aUri, CComPtr<ILogBucket> & aRetVal)
-{
+//  CreateLogBucket_window
+HRESULT Server::CreateLogBucket_window(LPCWSTR aUri, CComPtr<ILogBucket> & aRetVal) {
   // create container
   Container::_ComObject * newContainer = NULL;
   IF_FAILED_RET(Container::_ComObject::CreateInstance(&newContainer));
@@ -139,9 +136,14 @@ HRESULT Server::createLogWindow(LPCWSTR aUri, CComPtr<ILogBucket> & aRetVal)
 }
 
 //----------------------------------------------------------------------------
-//  createLogFile
-HRESULT Server::createLogFile(LPCWSTR aUri, CComPtr<ILogBucket> & aRetVal)
-{
+//  CreateLogBucket_xml
+HRESULT Server::CreateLogBucket_xml(LPCWSTR aUri, CComPtr<ILogBucket> & aRetVal) {
+  return S_OK;
+}
+
+//----------------------------------------------------------------------------
+//  CreateLogBucket_file
+HRESULT Server::CreateLogBucket_file(LPCWSTR aUri, CComPtr<ILogBucket> & aRetVal) {
   // create container
   Container::_ComObject * newContainer = NULL;
   IF_FAILED_RET(Container::_ComObject::CreateInstance(&newContainer));
@@ -160,28 +162,9 @@ HRESULT Server::createLogFile(LPCWSTR aUri, CComPtr<ILogBucket> & aRetVal)
 }
 
 //----------------------------------------------------------------------------
-//  createBucket
-HRESULT Server::createBucket(LPCWSTR aUri, CComPtr<ILogBucket> & aRetVal)
-{
-  aRetVal.Release();
-  CComPtr<IUri> uri;
-  IF_FAILED_RET(CreateUri(aUri, Uri_CREATE_CANONICALIZE, 0, &uri.p));
-
-  CComBSTR scheme;
-  IF_FAILED_RET(uri->GetSchemeName(&scheme));
-  if (scheme == L"window") {
-    IF_FAILED_RET(createLogWindow(aUri, aRetVal));
-  }
-  else if (scheme == L"file") {
-    IF_FAILED_RET(createLogFile(aUri, aRetVal));
-  }
-  if (aRetVal) {
-    mBuckets[aUri] = aRetVal;
-    return S_OK;
-  }
-
-  return INET_E_UNKNOWN_PROTOCOL;
+//  CreateLogBucket__default
+HRESULT Server::CreateLogBucket__default(LPCWSTR aUri, CComPtr<ILogBucket> & aRetVal) {
+  return CreateLogBucket_window(aUri, aRetVal);
 }
-
 
 } // namespace PumpkinLog

@@ -91,7 +91,7 @@ library PumpkinLogLib
   ]
   interface IServer : IDispatch
   {
-    [id(1), helpstring("method createLogger")] HRESULT createLogger([in] BSTR aName, [in, optional] VARIANT aOptions, [out, retval] IDispatch ** aRetVal);
+    [id(1), helpstring("method createLogger"), vararg] HRESULT createLogger([in] BSTR aName, [in] SAFEARRAY(VARIANT) pVals, [out, retval] IDispatch ** aRetVal);
   };
 
   [

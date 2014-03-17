@@ -34,57 +34,49 @@ HRESULT Logger::init(LPCWSTR aName, ILogServerInternal * aLogServer)
   return S_OK;
 }
 
-HRESULT Logger::setOptions(VARIANT aOptions)
+HRESULT Logger::setOptions(SAFEARRAY* pVals)
 {
-  if (VT_EMPTY == aOptions.vt) {
-    return S_OK;
-  }
   EXPECTED_(mServer);
-/*
-  CStringW bucketUri;
-  CComVariant vtOptions;
-  HRESULT hr = vtOptions.ChangeType(VT_BSTR, &aOptions);
-  if (SUCCEEDED(hr)) {
-    bucketUri = vtOptions.bstrVal;
+  if (mBuckets.size()) {
+    // can set options only once
+    return S_FALSE;
   }
-  else {
-    bucketUri = L"window://Default";
-  }
-  CComPtr<ILogBucket> container;
-  IF_FAILED_RET(mServer->getBucket(bucketUri, &container));
 
-  if (mLogDestination.IsEqualObject(container)) {
-    // no change
+  ATL::CComSafeArray<VARIANT> values;
+  HRESULT hr = values.Attach(pVals);
+  if (FAILED(hr)) {
+    return hr;
+  }
+
+  // lambda to ensure values.Detach() is called
+  hr = [&] () -> HRESULT {
+    for (ULONG i = 0; i < values.GetCount(); ++i) {
+      // get URI i
+      auto value = values.GetAt(i);
+      // ensure it is a string
+      CComVariant vtURI;
+      HRESULT hr = vtURI.ChangeType(VT_BSTR, &value);
+      if (FAILED(hr)) {
+        return DISP_E_TYPEMISMATCH;
+      }
+      std::wstring bucketUri = vtURI.bstrVal;
+
+      auto it = mBuckets.find(bucketUri);
+      if (it == mBuckets.end()) {
+        // not found: get from server
+        CComPtr<ILogBucket> container;
+        // ask server
+        IF_FAILED_RET(mServer->getBucket(bucketUri.c_str(), &container));
+        mBuckets[bucketUri] = container;
+        container->addRefLogger(mName);
+      }
+    }
     return S_OK;
-  }
+  }();
+  // prevent destruction of pVals
+  values.Detach();
 
-  // cleanup old bucket
-  if (mLogDestination) {
-    mLogDestination->removeRefLogger(mName);
-  }
-
-  mLogDestination = container;
-  mLogDestination->addRefLogger(mName);
-*/
-  LPCWSTR bucketURIs[] = {
-    L"file://U:\\Users\\Hans\\Documents\\Visual Studio 2010\\Projects\\PumpkinLog\\test.log",
-    L"window://Default"
-  };
-  LogBucketMap newBuckets;
-  for (int n = 0; n < 2; n++) {
-    auto it = mBuckets.find(bucketURIs[n]);
-    if (it == mBuckets.end()) {
-      CComPtr<ILogBucket> container;
-      IF_FAILED_RET(mServer->getBucket(bucketURIs[n], &container));
-      newBuckets[bucketURIs[n]] = container;
-      container->addRefLogger(mName);
-    }
-    else {
-      newBuckets[bucketURIs[n]] = it->second;
-    }
-  }
-  mBuckets = newBuckets;
-  return S_OK;
+  return hr;
 }
 
 

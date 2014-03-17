@@ -43,56 +43,45 @@ public:
 	}
 
 public:
-  STDMETHOD(createLogger)(BSTR aName, VARIANT aOptions, IDispatch ** aRetVal);
+  STDMETHOD(createLogger)(BSTR aName, SAFEARRAY* pVals, IDispatch ** aRetVal);
 
   STDMETHOD(onLoggerQuit)(BSTR aName);
   STDMETHOD(getBucket)(LPCWSTR aUri, ILogBucket ** aRetVal);
   STDMETHOD(onBucketGone)(LPCWSTR aUri);
 
 private:
-  typedef HRESULT (Server::*TCreateScheme)(IUri *);
+  typedef HRESULT (Server::*TCreateLogBucket)(LPCWSTR, CComPtr<ILogBucket> &);
 
-  HRESULT CreateScheme_window(IUri * aUri) {
-    return S_OK;
-  }
+  HRESULT CreateLogBucket_window(LPCWSTR aUri, CComPtr<ILogBucket> & aRetVal);
+  HRESULT CreateLogBucket_file(LPCWSTR aUri, CComPtr<ILogBucket> & aRetVal);
+  HRESULT CreateLogBucket_xml(LPCWSTR aUri, CComPtr<ILogBucket> & aRetVal);
+  HRESULT CreateLogBucket__default(LPCWSTR aUri, CComPtr<ILogBucket> & aRetVal);
 
-  HRESULT CreateScheme_xml(IUri * aUri) {
-    return S_OK;
-  }
-
-  HRESULT CreateScheme__default(IUri * aUri) {
-    return CreateScheme_window(aUri);
-  }
-
-  struct SchemeEntry
+  struct LogBucketEntry
   {
     LPCWSTR name;
-    TCreateScheme CreateScheme;
+    TCreateLogBucket CreateLogBucket;
   };
 
-  TCreateScheme GetSchemeCreator(LPCWSTR aScheme) {
-    static SchemeEntry schemes[] =
+  TCreateLogBucket GetLogBucketCreator(LPCWSTR aLogBucket) {
+    static LogBucketEntry schemes[] =
     {
-      {L"xml", &Server::CreateScheme_xml},
-      {L"window", &Server::CreateScheme_window},
+      {L"xml", &Server::CreateLogBucket_xml},
+      {L"window", &Server::CreateLogBucket_window},
+      {L"file", &Server::CreateLogBucket_file},
       {NULL, NULL}
     };
-    TCreateScheme CreateScheme = &Server::CreateScheme__default;
-    if (aScheme) {
-      for (SchemeEntry * entry = schemes; entry->CreateScheme; entry++) {
-        if (0 == wcscmp(entry->name, aScheme)) {
-          CreateScheme = entry->CreateScheme;
+    TCreateLogBucket CreateLogBucket = &Server::CreateLogBucket__default;
+    if (aLogBucket) {
+      for (LogBucketEntry * entry = schemes; entry->CreateLogBucket; entry++) {
+        if (0 == wcscmp(entry->name, aLogBucket)) {
+          CreateLogBucket = entry->CreateLogBucket;
           break;  // found
         }
       }
     }
-    return CreateScheme;
+    return CreateLogBucket;
   }
-
-  HRESULT createLogWindow(LPCWSTR aUri, CComPtr<ILogBucket> & aRetVal);
-  HRESULT createLogFile(LPCWSTR aUri, CComPtr<ILogBucket> & aRetVal);
-
-  HRESULT createBucket(LPCWSTR aUri, CComPtr<ILogBucket> & aRetVal);
 
   // Here we hold weak pointers because we don't want to influence the refcount.
   // It's safe to do so because Logger and LogWindow tells us before they commit suicide.

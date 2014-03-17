@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 7.00.0555 */
-/* at Mon Mar 17 17:57:20 2014
+/* at Mon Mar 17 19:26:11 2014
  */
 /* Compiler settings for PumpkinLog.idl:
     Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 7.00.0555 
@@ -562,9 +562,9 @@ EXTERN_C const IID IID_IServer;
     IServer : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE createLogger( 
+        virtual /* [vararg][helpstring][id] */ HRESULT STDMETHODCALLTYPE createLogger( 
             /* [in] */ BSTR aName,
-            /* [optional][in] */ VARIANT aOptions,
+            /* [in] */ SAFEARRAY * pVals,
             /* [retval][out] */ IDispatch **aRetVal) = 0;
         
     };
@@ -616,10 +616,10 @@ EXTERN_C const IID IID_IServer;
             /* [out] */ EXCEPINFO *pExcepInfo,
             /* [out] */ UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *createLogger )( 
+        /* [vararg][helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *createLogger )( 
             IServer * This,
             /* [in] */ BSTR aName,
-            /* [optional][in] */ VARIANT aOptions,
+            /* [in] */ SAFEARRAY * pVals,
             /* [retval][out] */ IDispatch **aRetVal);
         
         END_INTERFACE
@@ -658,8 +658,8 @@ EXTERN_C const IID IID_IServer;
     ( (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr) ) 
 
 
-#define IServer_createLogger(This,aName,aOptions,aRetVal)	\
-    ( (This)->lpVtbl -> createLogger(This,aName,aOptions,aRetVal) ) 
+#define IServer_createLogger(This,aName,pVals,aRetVal)	\
+    ( (This)->lpVtbl -> createLogger(This,aName,pVals,aRetVal) ) 
 
 #endif /* COBJMACROS */
 
