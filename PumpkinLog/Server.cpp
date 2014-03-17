@@ -22,22 +22,30 @@ STDMETHODIMP Server::createLogger(BSTR aName, VARIANT aOptions, IDispatch ** aRe
     return E_POINTER;
   }
 
-  // parse URI
-  CComPtr<IUri> uri;
-  HRESULT hr = CreateUri(aName, CREATE_URI_FLAGS, 0, &uri);
-  if (FAILED(hr)) {
-    return hr;
-  }
-  // get scheme
+  // Get the scheme name.
+  // Basic part of every configuration is a URI. It provides the follwing information:
+  // 1) Scheme
+  //    
+
   CComBSTR schemeName;
-  hr = uri->GetSchemeName(&schemeName);
-  if (FAILED(hr)) {
-    return hr;
+  HRESULT hr = E_FAIL;
+  CComPtr<IUri> uri;
+  if (VT_BSTR == aOptions.vt) {
+    // parse URI
+    hr = CreateUri(aOptions.bstrVal, CREATE_URI_FLAGS, 0, &uri);
+    if (FAILED(hr)) {
+      return hr;
+    }
+    // get scheme
+    hr = uri->GetSchemeName(&schemeName);
+    if (FAILED(hr)) {
+      return hr;
+    }
   }
 
   // handle scheme
-  Scheme scheme = GetScheme(schemeName);
-  hr = ((*this).*scheme)();
+  TCreateScheme CreateScheme = GetSchemeCreator(schemeName);
+  hr = (*this.*CreateScheme)(uri);
 
 
   CComPtr<IDispatch> instance;

@@ -50,18 +50,18 @@ public:
   STDMETHOD(onBucketGone)(LPCWSTR aUri);
 
 private:
-  typedef HRESULT (Server::*TCreateScheme)();
+  typedef HRESULT (Server::*TCreateScheme)(IUri *);
 
-  HRESULT CreateScheme_window() {
+  HRESULT CreateScheme_window(IUri * aUri) {
     return S_OK;
   }
 
-  HRESULT CreateScheme_xml() {
+  HRESULT CreateScheme_xml(IUri * aUri) {
     return S_OK;
   }
 
-  HRESULT CreateScheme__default() {
-    return S_OK;
+  HRESULT CreateScheme__default(IUri * aUri) {
+    return CreateScheme_window(aUri);
   }
 
   struct SchemeEntry
@@ -70,23 +70,23 @@ private:
     TCreateScheme CreateScheme;
   };
 
-  TCreateScheme GetScheme(LPCWSTR aScheme) {
+  TCreateScheme GetSchemeCreator(LPCWSTR aScheme) {
     static SchemeEntry schemes[] =
     {
       {L"xml", &Server::CreateScheme_xml},
       {L"window", &Server::CreateScheme_window},
       {NULL, NULL}
     };
-    
-    for (SchemeEntry * entry = schemes; entry->CreateScheme; entry++) {
-      if (!entry->name) {
-        // last entry, default handler
-      }
-      if (0 == wcscmp(entry->name, aScheme)) {
-        return entry->CreateScheme;
+    TCreateScheme CreateScheme = &Server::CreateScheme__default;
+    if (aScheme) {
+      for (SchemeEntry * entry = schemes; entry->CreateScheme; entry++) {
+        if (0 == wcscmp(entry->name, aScheme)) {
+          CreateScheme = entry->CreateScheme;
+          break;  // found
+        }
       }
     }
-    return &Server::CreateScheme__default;
+    return CreateScheme;
   }
 
   HRESULT createLogWindow(LPCWSTR aUri, CComPtr<ILogBucket> & aRetVal);
