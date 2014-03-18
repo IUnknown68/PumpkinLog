@@ -7,6 +7,8 @@
 #include "resource.h"       // main symbols
 #include "PumpkinLog.h"
 #include "Logger.h"
+#include "LogWindow.h"
+#include "LogBucket/FileBucket.h"
 
 // Server
 
@@ -50,37 +52,42 @@ public:
   STDMETHOD(onBucketGone)(LPCWSTR aUri);
 
 private:
-  typedef HRESULT (Server::*TCreateLogBucket)(LPCWSTR, CComPtr<ILogBucket> &);
+  typedef HRESULT (Server::*TCreateBucket)(LPCWSTR, CComPtr<ILogBucket> &);
 
-  HRESULT CreateLogBucket_window(LPCWSTR aUri, CComPtr<ILogBucket> & aRetVal);
-  HRESULT CreateLogBucket_file(LPCWSTR aUri, CComPtr<ILogBucket> & aRetVal);
-  HRESULT CreateLogBucket_xml(LPCWSTR aUri, CComPtr<ILogBucket> & aRetVal);
-  HRESULT CreateLogBucket__default(LPCWSTR aUri, CComPtr<ILogBucket> & aRetVal);
+  template<class T> HRESULT CreateBucket(LPCWSTR aUri, CComPtr<ILogBucket> & aRetVal)
+  {
+    // create container
+    LogBucket::Container::_ComObject * newContainer = NULL;
+    IF_FAILED_RET(LogBucket::Container::_ComObject::CreateInstance(&newContainer));
+    CComPtr<ILogBucket> containerOwner(newContainer);
+
+    // create target
+    T::_ComObject * newTarget = NULL;
+    IF_FAILED_RET(T::_ComObject::CreateInstance(&newTarget));
+    CComPtr<ILogBucket> targetOwner(newTarget);
+
+    // init container
+    IF_FAILED_RET(newContainer->init(aUri, targetOwner, this));
+
+    aRetVal = containerOwner;
+    return S_OK;
+  }
 
   struct LogBucketEntry
   {
     LPCWSTR name;
-    TCreateLogBucket CreateLogBucket;
+    TCreateBucket CreateBucket;
   };
 
-  TCreateLogBucket GetLogBucketCreator(LPCWSTR aLogBucket) {
-    static LogBucketEntry schemes[] =
+  LogBucketEntry * GetBucketCreatorMap() {
+    static LogBucketEntry bucketCreators[] =
     {
-      {L"xml", &Server::CreateLogBucket_xml},
-      {L"window", &Server::CreateLogBucket_window},
-      {L"file", &Server::CreateLogBucket_file},
+      //{L"xml", &Server::CreateBucket<LogConfig>},
+      {L"window", &Server::CreateBucket<LogWindow>},
+      {L"file", &Server::CreateBucket<LogBucket::FileBucket>},
       {NULL, NULL}
     };
-    TCreateLogBucket CreateLogBucket = &Server::CreateLogBucket__default;
-    if (aLogBucket) {
-      for (LogBucketEntry * entry = schemes; entry->CreateLogBucket; entry++) {
-        if (0 == wcscmp(entry->name, aLogBucket)) {
-          CreateLogBucket = entry->CreateLogBucket;
-          break;  // found
-        }
-      }
-    }
-    return CreateLogBucket;
+    return bucketCreators;
   }
 
   // Here we hold weak pointers because we don't want to influence the refcount.

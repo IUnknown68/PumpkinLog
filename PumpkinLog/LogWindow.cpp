@@ -69,32 +69,45 @@ LRESULT LogWindow::OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, 
   return 0;
 }
 
-LRESULT LogWindow::OnClearLog(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+LRESULT LogWindow::OnCmdClearLog(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
 {
   m_view.ClearLog();
   return 0;
 }
 
-LRESULT LogWindow::OnFileClose(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+LRESULT LogWindow::OnCmdClose(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
 {
   PostMessage(WM_CLOSE);
   return 0;
 }
 
-LRESULT LogWindow::OnExit(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+LRESULT LogWindow::OnCmdExit(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
 {
+  if (mLoggerRefcount > 0) {
+    CString s;
+    if (1 == mLoggerRefcount) {
+      s = _T("There is still one logger connected.");
+    }
+    else {
+      s.Format(_T("There are still %i loggers connected.\nExiting now will disconnect them ungraceful\n\nAre you sure you want to quit?"), mLoggerRefcount);
+    }
+    s += _T("\nExiting now will disconnect ungraceful.\n\nAre you sure you want to quit?");
+    if (IDYES != MessageBox(s, L"Exiting PumpkinLog", MB_YESNO|MB_ICONQUESTION)) {
+      return 0;
+    }
+  }
   DestroyWindow();
   ::PostQuitMessage(0);
   return 0;
 }
 
-LRESULT LogWindow::OnFileSaveAs(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+LRESULT LogWindow::OnCmdFileSaveAs(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
 {
   m_view.SaveAs();
   return 0;
 }
 
-LRESULT LogWindow::OnCopy(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+LRESULT LogWindow::OnCmdCopy(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
 {
   m_view.Copy();
   return 0;

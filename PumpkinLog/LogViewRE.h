@@ -73,6 +73,9 @@ private:
   void LogIntro(LogFacility logType, LPCWSTR aName);
   void LogVariant(VARIANT & value);
   void LogExtro();
+
+  CFont mFont;
+
 };
 
 

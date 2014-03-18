@@ -14,7 +14,7 @@ interface ILogServerInternal;
 	uuid(E034DA10-3781-40D4-8B3F-9A47700F3490),
 	dual,
 	nonextensible,
-	helpstring("ILoggerDispatch Interface"),
+	helpstring("ILoggerDispatch Interface. This interface is meant to be used from scripts."),
 	pointer_default(unique)
 ]
 interface ILoggerDispatch : IDispatch

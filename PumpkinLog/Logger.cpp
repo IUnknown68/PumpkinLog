@@ -27,23 +27,13 @@ void Logger::FinalRelease()
   }
 }
 
-HRESULT Logger::init(LPCWSTR aName, ILogServerInternal * aLogServer)
+HRESULT Logger::init(LPCWSTR aName, SAFEARRAY* aLogBucketURIs, ILogServerInternal * aLogServer)
 {
   mName = aName;
   mServer = aLogServer;
-  return S_OK;
-}
-
-HRESULT Logger::setOptions(SAFEARRAY* pVals)
-{
-  EXPECTED_(mServer);
-  if (mBuckets.size()) {
-    // can set options only once
-    return S_FALSE;
-  }
 
   ATL::CComSafeArray<VARIANT> values;
-  HRESULT hr = values.Attach(pVals);
+  HRESULT hr = values.Attach(aLogBucketURIs);
   if (FAILED(hr)) {
     return hr;
   }
@@ -73,12 +63,11 @@ HRESULT Logger::setOptions(SAFEARRAY* pVals)
     }
     return S_OK;
   }();
-  // prevent destruction of pVals
+  // prevent destruction of aLogBucketURIs
   values.Detach();
 
   return hr;
 }
-
 
 //----------------------------------------------------------------------------
 //----------------------------------------------------------------------------

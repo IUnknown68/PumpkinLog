@@ -34,8 +34,7 @@ public:
 	HRESULT FinalConstruct();
 	void FinalRelease();
 
-  HRESULT init(LPCWSTR aName, ILogServerInternal * aLogServer);
-  HRESULT setOptions(SAFEARRAY* pVals);
+  HRESULT init(LPCWSTR aName, SAFEARRAY* aLogBucketURIs, ILogServerInternal * aLogServer);
 
 public:
   STDMETHOD(log)(SAFEARRAY* pVals);

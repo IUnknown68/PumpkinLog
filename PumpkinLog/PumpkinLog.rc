@@ -84,12 +84,13 @@ END
 
 IDR_MAINFRAME TOOLBAR 24, 24
 BEGIN
-    BUTTON      ID_CLEAR_LOG
-    BUTTON      ID_FILE_SAVE_AS
-    BUTTON      ID_FILE_CLOSE
-    BUTTON      ID_APP_EXIT
-    SEPARATOR
     BUTTON      ID_EDIT_COPY
+    BUTTON      ID_EDIT_CLEAR_ALL
+    SEPARATOR
+    BUTTON      ID_FILE_SAVE_AS
+    SEPARATOR
+    BUTTON      IDCLOSE
+    BUTTON      ID_APP_EXIT
 END
 
 
@@ -109,11 +110,11 @@ IDR_MAINFRAME MENU
 BEGIN
     POPUP "&File"
     BEGIN
-        MENUITEM "&Clear window\tCtrl+N",       ID_CLEAR_LOG
+        MENUITEM "&Clear window\tCtrl+N",       ID_EDIT_CLEAR_ALL
         MENUITEM "Save &As...\tCtrl+S",         ID_FILE_SAVE_AS
-        MENUITEM "Close",                       ID_FILE_CLOSE
+        MENUITEM "Close\tCtrl+F4",              IDCLOSE
         MENUITEM SEPARATOR
-        MENUITEM "E&xit",                       ID_APP_EXIT
+        MENUITEM "E&xit\tAtl+F4",               ID_APP_EXIT
     END
     POPUP "&Edit"
     BEGIN
@@ -175,9 +176,10 @@ END
 IDR_MAINFRAME ACCELERATORS
 BEGIN
     "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
-    "N",            ID_CLEAR_LOG,           VIRTKEY, CONTROL, NOINVERT
+    "N",            ID_EDIT_CLEAR_ALL,      VIRTKEY, CONTROL, NOINVERT
     "S",            ID_FILE_SAVE_AS,        VIRTKEY, CONTROL, NOINVERT
-    VK_F4,          ID_FILE_CLOSE,          VIRTKEY, ALT, NOINVERT
+    VK_F4,          IDCLOSE,                VIRTKEY, CONTROL, NOINVERT
+    VK_F4,          ID_APP_EXIT,            VIRTKEY, ALT, NOINVERT
 END
 
 
@@ -231,15 +233,9 @@ END
 
 STRINGTABLE
 BEGIN
-    ID_FILE_NEW             "Create a new document\nNew"
-    ID_FILE_OPEN            "Open an existing document\nOpen"
     ID_FILE_CLOSE           "Close the active window\nClose"
     ID_FILE_SAVE            "Save the active document\nSave"
     ID_FILE_SAVE_AS         "Save the active document with a new name\nSave As"
-    ID_FILE_PAGE_SETUP      "Change the printing options\nPage Setup"
-    ID_FILE_PRINT_SETUP     "Change the printer and printing options\nPrint Setup"
-    ID_FILE_PRINT           "Print the active document\nPrint"
-    ID_FILE_PRINT_PREVIEW   "Display full pages\nPrint Preview"
 END
 
 STRINGTABLE
@@ -250,33 +246,8 @@ END
 
 STRINGTABLE
 BEGIN
-    ID_NEXT_PANE            "Switch to the next window pane\nNext Pane"
-    ID_PREV_PANE            "Switch back to the previous window pane\nPrevious Pane"
-END
-
-STRINGTABLE
-BEGIN
-    ID_WINDOW_NEW           "Open another window for the active document\nNew Window"
-    ID_WINDOW_ARRANGE       "Arrange icons at the bottom of the window\nArrange Icons"
-    ID_WINDOW_CASCADE       "Arrange windows so they overlap\nCascade Windows"
-    ID_WINDOW_TILE_HORZ     "Arrange windows as non-overlapping tiles\nTile Windows"
-    ID_WINDOW_TILE_VERT     "Arrange windows as non-overlapping tiles\nTile Windows"
-    ID_WINDOW_SPLIT         "Split the active window into panes\nSplit"
-END
-
-STRINGTABLE
-BEGIN
-    ID_EDIT_CLEAR           "Erase the selection\nErase"
     ID_EDIT_CLEAR_ALL       "Erase everything\nErase All"
     ID_EDIT_COPY            "Copy the selection and put it on the Clipboard\nCopy"
-    ID_EDIT_CUT             "Cut the selection and put it on the Clipboard\nCut"
-    ID_EDIT_FIND            "Find the specified text\nFind"
-    ID_EDIT_PASTE           "Insert Clipboard contents\nPaste"
-    ID_EDIT_REPEAT          "Repeat the last action\nRepeat"
-    ID_EDIT_REPLACE         "Replace specific text with different text\nReplace"
-    ID_EDIT_SELECT_ALL      "Select the entire document\nSelect All"
-    ID_EDIT_UNDO            "Undo the last action\nUndo"
-    ID_EDIT_REDO            "Redo the previously undone action\nRedo"
 END
 
 STRINGTABLE
@@ -310,11 +281,6 @@ END
 STRINGTABLE
 BEGIN
     IDS_PROJNAME            "PumpkinLog"
-END
-
-STRINGTABLE
-BEGIN
-    ID_CLEAR_LOG            "Clear the log window\nClear"
 END
 
 STRINGTABLE

@@ -39,11 +39,11 @@ public:
     MESSAGE_HANDLER(WM_CREATE, OnCreate)
     MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
     MESSAGE_HANDLER(WM_CLOSE, OnClose)
-		COMMAND_ID_HANDLER(ID_CLEAR_LOG, OnClearLog)
-		COMMAND_ID_HANDLER(ID_FILE_CLOSE, OnFileClose)
-		COMMAND_ID_HANDLER(ID_APP_EXIT, OnExit)
-		COMMAND_ID_HANDLER(ID_FILE_SAVE_AS, OnFileSaveAs)
-		COMMAND_ID_HANDLER(ID_EDIT_COPY, OnCopy)
+		COMMAND_ID_HANDLER(ID_EDIT_CLEAR_ALL, OnCmdClearLog)
+		COMMAND_ID_HANDLER(IDCLOSE, OnCmdClose)
+		COMMAND_ID_HANDLER(ID_APP_EXIT, OnCmdExit)
+		COMMAND_ID_HANDLER(ID_FILE_SAVE_AS, OnCmdFileSaveAs)
+		COMMAND_ID_HANDLER(ID_EDIT_COPY, OnCmdCopy)
     CHAIN_MSG_MAP(CFrameWindowImpl<LogWindow>)
   END_MSG_MAP()
 
@@ -55,11 +55,11 @@ public:
   LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
   LRESULT OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 
-	LRESULT OnClearLog(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
-	LRESULT OnFileClose(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
-	LRESULT OnExit(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
-	LRESULT OnFileSaveAs(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
-	LRESULT OnCopy(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
+	LRESULT OnCmdClearLog(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
+	LRESULT OnCmdClose(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
+	LRESULT OnCmdExit(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
+	LRESULT OnCmdFileSaveAs(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
+	LRESULT OnCmdCopy(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 public:
   STDMETHOD(init)(LPCWSTR aUri, ILogBucket * aContainer, ILogServerInternal * aLogServer);
   STDMETHOD_(ULONG, addRefLogger)(LPCWSTR aName);

@@ -3,14 +3,26 @@ function UserInput( myPrompt ) {
   return WScript.StdIn.ReadLine();
 }
 
-var logger1 = WScript.CreateObject("PumpkinLog.Server").createLogger("logger1", "window://default/");
-//var logger1 = WScript.CreateObject("PumpkinLog.Server").createLogger("logger1", "window://default/", "file://U:\\Users\\Hans\\Documents\\Visual Studio 2010\\Projects\\PumpkinLog\\test.log");
-//var logger1 = WScript.CreateObject("PumpkinLog.Server").createLogger("logger1", "http://3.arne.internal.salsitasoft.com/");
-//var logger1 = WScript.CreateObject("PumpkinLog.Server").createLogger("logger1", "file://C:/Users/Arne/Documents/Visual Studio 2010/Projects/PumpkinLog/testlog.txt");
-//var logger1 = WScript.CreateObject("PumpkinLog.Server").createLogger("logger1", "file://C:/Users/Arne/Documents/Visual Studio 2010/Projects/PumpkinLog/testlog.rtf");
-//var logger1 = WScript.CreateObject("PumpkinLog.Server").createLogger("logger1", "config://C:/Users/Arne/Documents/Visual Studio 2010/Projects/PumpkinLog/logconfig.xml");
+var console = WScript.CreateObject("PumpkinLog.Server").createLogger("logger1", "window://default/");
+//var console = WScript.CreateObject("PumpkinLog.Server").createLogger("logger1", "window://default/", "file://U:\\Users\\Hans\\Documents\\Visual Studio 2010\\Projects\\PumpkinLog\\test.log");
+//var console = WScript.CreateObject("PumpkinLog.Server").createLogger("logger1", "http://3.arne.internal.salsitasoft.com/");
+//var console = WScript.CreateObject("PumpkinLog.Server").createLogger("logger1", "file://C:/Users/Arne/Documents/Visual Studio 2010/Projects/PumpkinLog/testlog.txt");
+//var console = WScript.CreateObject("PumpkinLog.Server").createLogger("logger1", "file://C:/Users/Arne/Documents/Visual Studio 2010/Projects/PumpkinLog/testlog.rtf");
+//var console = WScript.CreateObject("PumpkinLog.Server").createLogger("logger1", "config://C:/Users/Arne/Documents/Visual Studio 2010/Projects/PumpkinLog/logconfig.xml");
 
-logger1.info("Wait for input");
-var s = UserInput('Enter something');
-logger1.info("DONE:", s);
+//console.info("Wait for input");
+//var s = UserInput('Enter something');
+//console.info("DONE:", s);
 
+var ob = {a: "hello"};
+console.info("Just a text");
+console.info("A text: %s and a number %i", "Hello", 123);
+console.warn("A text: %s and a number %i, but no arguments");
+console.warn("A text: %s and a number %i, but only one argument", "Hello");
+console.warn("A text: %s and a number %i, but more arguments", "Hello", 123, "hello", 456);
+console.info("Starting with % then a text: %s and a number %i", "Hello", 123);
+console.info("A text: %s and a percentage number %i%", "Hello", 123);
+console.info("An object %o", undefined);
+
+console.warn("Expected text, but have number: '%s'", 123);
+console.warn("Expected number, but have text: '%i'", "Hello");
