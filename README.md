@@ -34,6 +34,9 @@ PumpkinLog.exe /UnregServer
 
 Since PumpkinLog is for developers, I guess that's acceptable for now.
 
+**Note:** The logserver itself is 32bit, but the wrapper libraries (see below)
+exist both in 32 and 64bit.
+
 Usage
 -----
 
@@ -87,6 +90,11 @@ how. In case you don't like to deal with COM you can use the wrapper library
 included. The wrapper also has the advantage, that nothing bad will happen on
 systems where the logger is not installed, the calls to the logger will simply
 be ignored.
+
+So you have to:
+- include `libPumpkinLog.h` in your project
+- link against `libPumpkinLog.lib` (32 and 64bit available)
+
 ```C++
 using namespace PumpkinLog;
 
@@ -108,6 +116,9 @@ underlying `Logger` object. Otherwise it works exactly like in JavaScript.
 
 So to format a debug message you would do:
 ```C++
+// from somewhere
+int itemCount;
+LPCWSTR itemType;
 logger << L"Roger, I have %i items of type %s" << itemCount << itemType << Logger::log;
 ```
 You can log everything that can be converted to a `VARIANT`. For the future I'm

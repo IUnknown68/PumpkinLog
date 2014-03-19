@@ -33,7 +33,7 @@ public:
     LONG count = (LONG)mEntries.size();
     CComSafeArray<VARIANT> options(count);
     for (auto it = mEntries.begin(); it != mEntries.end(); ++it) {
-      options[it - mEntries.begin()] = CComVariant(*it);
+      options[(LONG)(it - mEntries.begin())] = CComVariant(*it);
     }
     mEntries.clear();
 

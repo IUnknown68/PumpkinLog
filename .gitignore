@@ -157,3 +157,5 @@ $RECYCLE.BIN/
 
 # Manually added files
 PumpkinLog/PumpkinLog.h
+deploy/
+
