@@ -7,8 +7,8 @@
 #include "resource.h"       // main symbols
 #include "PumpkinLog.h"
 #include "Logger.h"
-#include "LogBucket/LogWindow.h"
-#include "LogBucket/FileBucket.h"
+#include "../LogBuckets/LogWindow.h"
+#include "../LogBuckets/FileBucket.h"
 
 // Server
 

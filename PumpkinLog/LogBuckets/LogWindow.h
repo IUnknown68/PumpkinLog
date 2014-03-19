@@ -3,7 +3,7 @@
 #pragma once
 #include "resource.h"       // main symbols
 #include "PumpkinLog.h"
-#include "LogBucket/Container.h"
+#include "Container.h"
 
 #include "LogViewRE.h"
 

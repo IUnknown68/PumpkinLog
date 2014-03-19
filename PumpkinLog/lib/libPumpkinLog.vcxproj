@@ -99,7 +99,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\PumpkinLog.h" />
-    <ClInclude Include="PumpkinLog.h" />
+    <ClInclude Include="libPumpkinLog.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>

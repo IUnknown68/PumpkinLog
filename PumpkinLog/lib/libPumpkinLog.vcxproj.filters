@@ -11,7 +11,7 @@
   <ItemGroup>
     <ClInclude Include="stdafx.h">
     </ClInclude>
-    <ClInclude Include="PumpkinLog.h">
+    <ClInclude Include="libPumpkinLog.h">
       <Filter>lib</Filter>
     </ClInclude>
     <ClInclude Include="..\PumpkinLog.h">
