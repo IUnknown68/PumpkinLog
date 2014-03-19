@@ -123,30 +123,27 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AboutDlg.cpp" />
-    <ClCompile Include="LogBucket\Container.cpp" />
-    <ClCompile Include="LogBucket\FileBucket.cpp" />
-    <ClCompile Include="Logger.cpp" />
-    <ClCompile Include="PumpkinLog.cpp" />
-    <ClCompile Include="Server.cpp" />
-    <ClCompile Include="LogViewRE.cpp" />
-    <ClCompile Include="LogWindow.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="core\Logger.cpp" />
+    <ClCompile Include="core\PumpkinLog.cpp" />
+    <ClCompile Include="core\Server.cpp" />
+    <ClCompile Include="LogBucket\Container.cpp" />
+    <ClCompile Include="LogBucket\FileBucket.cpp" />
+    <ClCompile Include="LogBucket\LogViewRE.cpp" />
+    <ClCompile Include="LogBucket\LogWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AboutDlg.h" />
-    <ClInclude Include="ComPtr.h" />
-    <ClInclude Include="LogBucket\Container.h" />
-    <ClInclude Include="LogBucket\FileBucket.h" />
-    <ClInclude Include="Logger.h" />
-    <ClInclude Include="Server.h" />
-    <ClInclude Include="LogViewRE.h" />
-    <ClInclude Include="LogWindow.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="core\Logger.h" />
+    <ClInclude Include="core\Server.h" />
+    <ClInclude Include="LogBucket\Container.h" />
+    <ClInclude Include="LogBucket\FileBucket.h" />
+    <ClInclude Include="LogBucket\LogViewRE.h" />
+    <ClInclude Include="LogBucket\LogWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PumpkinLog.rc" />
@@ -154,8 +151,6 @@
   <ItemGroup>
     <None Include="PumpkinLog.rgs" />
     <None Include="Server.rgs" />
-    <None Include="res\jquery.js" />
-    <None Include="res\log.html" />
     <None Include="res\PumpkinLog.ico" />
     <None Include="res\toolbar.bmp" />
   </ItemGroup>

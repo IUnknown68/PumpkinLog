@@ -5,6 +5,7 @@
 #include "PumpkinLog.h"
 
 namespace PumpkinLog {
+namespace LogBucket {
 
 class LogViewRE : public CWindowImpl<LogViewRE, CRichEditCtrl>
 {
@@ -78,5 +79,5 @@ private:
 
 };
 
-
+} // namespace LogBucket
 } // namespace PumpkinLog

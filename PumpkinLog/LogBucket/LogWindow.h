@@ -8,6 +8,7 @@
 #include "LogViewRE.h"
 
 namespace PumpkinLog {
+namespace LogBucket {
 
 typedef LogViewRE LogView;
 
@@ -75,5 +76,5 @@ private:
   CStringW  mName;
 };
 
-
+} // namespace LogBucket
 } // namespace PumpkinLog

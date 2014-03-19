@@ -11,6 +11,7 @@
 #define LOG_COLOR_ERROR     0x000000d0
 
 namespace PumpkinLog {
+namespace LogBucket {
 
 LPCWSTR LogViewRE::FileDialog::sDocString = L"RichText-Document (*.rtf)\0*.rtf\0Text-Document (*.txt)\0*.txt\0\0";
 
@@ -325,4 +326,5 @@ void LogViewRE::SaveAs()
   StreamOut(format, eds);
 }
 
+} // namespace LogBucket
 } // namespace PumpkinLog

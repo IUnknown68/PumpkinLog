@@ -5,87 +5,61 @@
       <UniqueIdentifier>{9a7907d8-4473-4ab0-8e9f-c2ef738b6b78}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;jpg;jpeg;jpe;manifest;html;js</Extensions>
     </Filter>
-    <Filter Include="PumpkinLog">
-      <UniqueIdentifier>{58f68ce9-7c35-4faa-b535-414afa5fc840}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="PumpkinLog\Source Files">
+    <Filter Include="Core">
       <UniqueIdentifier>{b6f992dd-534d-4b44-9097-221a52c92e37}</UniqueIdentifier>
-      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm</Extensions>
     </Filter>
-    <Filter Include="PumpkinLog\Header Files">
-      <UniqueIdentifier>{fe306c5e-3bee-4a7d-b17b-99d24ac43a22}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc</Extensions>
-    </Filter>
-    <Filter Include="PumpkinLog\LogBucket">
+    <Filter Include="LogBuckets">
       <UniqueIdentifier>{147cb3aa-c180-4134-ab0f-247408d4d724}</UniqueIdentifier>
     </Filter>
-    <Filter Include="PumpkinLog\LogBucket\Source Files">
-      <UniqueIdentifier>{dab43d1a-a512-45f2-beb3-6a123811153c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="PumpkinLog\LogBucket\Header Files">
-      <UniqueIdentifier>{e9036ada-a314-4bfd-a771-fd6fc0f86242}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>PumpkinLog\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PumpkinLog.cpp">
-      <Filter>PumpkinLog\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AboutDlg.cpp">
-      <Filter>PumpkinLog\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Server.cpp">
-      <Filter>PumpkinLog\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Logger.cpp">
-      <Filter>PumpkinLog\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LogWindow.cpp">
-      <Filter>PumpkinLog\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LogViewRE.cpp">
-      <Filter>PumpkinLog\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LogBucket\Container.cpp">
-      <Filter>PumpkinLog\LogBucket\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LogBucket\FileBucket.cpp">
-      <Filter>PumpkinLog\LogBucket\Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
-      <Filter>PumpkinLog\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AboutDlg.h">
-      <Filter>PumpkinLog\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
-      <Filter>PumpkinLog\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Server.h">
-      <Filter>PumpkinLog\Header Files</Filter>
+    <ClInclude Include="core\Server.h">
+      <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Logger.h">
-      <Filter>PumpkinLog\Header Files</Filter>
+    <ClInclude Include="core\Logger.h">
+      <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="LogWindow.h">
-      <Filter>PumpkinLog\Header Files</Filter>
+    <ClInclude Include="LogBucket\LogWindow.h">
+      <Filter>LogBuckets</Filter>
     </ClInclude>
-    <ClInclude Include="LogViewRE.h">
-      <Filter>PumpkinLog\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ComPtr.h">
-      <Filter>PumpkinLog\Header Files</Filter>
+    <ClInclude Include="LogBucket\LogViewRE.h">
+      <Filter>LogBuckets</Filter>
     </ClInclude>
     <ClInclude Include="LogBucket\Container.h">
-      <Filter>PumpkinLog\LogBucket\Header Files</Filter>
+      <Filter>LogBuckets</Filter>
     </ClInclude>
     <ClInclude Include="LogBucket\FileBucket.h">
-      <Filter>PumpkinLog\LogBucket\Header Files</Filter>
+      <Filter>LogBuckets</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+    </ClCompile>
+    <ClCompile Include="core\PumpkinLog.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Server.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="core\Logger.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="LogBucket\LogWindow.cpp">
+      <Filter>LogBuckets</Filter>
+    </ClCompile>
+    <ClCompile Include="LogBucket\LogViewRE.cpp">
+      <Filter>LogBuckets</Filter>
+    </ClCompile>
+    <ClCompile Include="LogBucket\Container.cpp">
+      <Filter>LogBuckets</Filter>
+    </ClCompile>
+    <ClCompile Include="LogBucket\FileBucket.cpp">
+      <Filter>LogBuckets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PumpkinLog.rc">
@@ -105,16 +79,9 @@
     <None Include="Server.rgs">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="res\jquery.js">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="res\log.html">
-      <Filter>Resource Files</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Midl Include="PumpkinLog.idl">
-      <Filter>PumpkinLog\Source Files</Filter>
     </Midl>
   </ItemGroup>
 </Project>

@@ -2,6 +2,7 @@
 #include "LogWindow.h"
 
 namespace PumpkinLog {
+namespace LogBucket {
 
 HRESULT LogWindow::FinalConstruct()
 {
@@ -172,5 +173,5 @@ STDMETHODIMP LogWindow::onLoggerLog(LogFacility aFacility, LPCWSTR aName, SAFEAR
   return S_OK;
 }
 
-
+} // namespace LogBucket
 } // namespace PumpkinLog

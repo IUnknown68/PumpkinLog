@@ -31,8 +31,6 @@ IDR_PUMPKINLOGSERVER    REGISTRY                "Server.rgs"
 // HTML
 //
 
-JQUERY.JS               HTML                    "res\\jquery.js"
-LOG.HTML                HTML                    "res\\log.html"
 #endif    // German (Germany) resources
 /////////////////////////////////////////////////////////////////////////////
 
