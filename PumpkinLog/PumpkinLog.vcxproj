@@ -130,20 +130,20 @@
     <ClCompile Include="core\Logger.cpp" />
     <ClCompile Include="core\PumpkinLog.cpp" />
     <ClCompile Include="core\Server.cpp" />
-    <ClCompile Include="LogBucket\Container.cpp" />
-    <ClCompile Include="LogBucket\FileBucket.cpp" />
-    <ClCompile Include="LogBucket\LogViewRE.cpp" />
-    <ClCompile Include="LogBucket\LogWindow.cpp" />
+    <ClCompile Include="LogBuckets\Container.cpp" />
+    <ClCompile Include="LogBuckets\FileBucket.cpp" />
+    <ClCompile Include="LogBuckets\LogViewRE.cpp" />
+    <ClCompile Include="LogBuckets\LogWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="core\Logger.h" />
     <ClInclude Include="core\Server.h" />
-    <ClInclude Include="LogBucket\Container.h" />
-    <ClInclude Include="LogBucket\FileBucket.h" />
-    <ClInclude Include="LogBucket\LogViewRE.h" />
-    <ClInclude Include="LogBucket\LogWindow.h" />
+    <ClInclude Include="LogBuckets\Container.h" />
+    <ClInclude Include="LogBuckets\FileBucket.h" />
+    <ClInclude Include="LogBuckets\LogViewRE.h" />
+    <ClInclude Include="LogBuckets\LogWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PumpkinLog.rc" />

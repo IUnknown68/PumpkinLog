@@ -23,16 +23,16 @@
     <ClInclude Include="core\Logger.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="LogBucket\LogWindow.h">
+    <ClInclude Include="LogBuckets\LogWindow.h">
       <Filter>LogBuckets</Filter>
     </ClInclude>
-    <ClInclude Include="LogBucket\LogViewRE.h">
+    <ClInclude Include="LogBuckets\LogViewRE.h">
       <Filter>LogBuckets</Filter>
     </ClInclude>
-    <ClInclude Include="LogBucket\Container.h">
+    <ClInclude Include="LogBuckets\Container.h">
       <Filter>LogBuckets</Filter>
     </ClInclude>
-    <ClInclude Include="LogBucket\FileBucket.h">
+    <ClInclude Include="LogBuckets\FileBucket.h">
       <Filter>LogBuckets</Filter>
     </ClInclude>
   </ItemGroup>
@@ -48,16 +48,16 @@
     <ClCompile Include="core\Logger.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="LogBucket\LogWindow.cpp">
+    <ClCompile Include="LogBuckets\LogWindow.cpp">
       <Filter>LogBuckets</Filter>
     </ClCompile>
-    <ClCompile Include="LogBucket\LogViewRE.cpp">
+    <ClCompile Include="LogBuckets\LogViewRE.cpp">
       <Filter>LogBuckets</Filter>
     </ClCompile>
-    <ClCompile Include="LogBucket\Container.cpp">
+    <ClCompile Include="LogBuckets\Container.cpp">
       <Filter>LogBuckets</Filter>
     </ClCompile>
-    <ClCompile Include="LogBucket\FileBucket.cpp">
+    <ClCompile Include="LogBuckets\FileBucket.cpp">
       <Filter>LogBuckets</Filter>
     </ClCompile>
   </ItemGroup>
