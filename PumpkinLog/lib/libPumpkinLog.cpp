@@ -1,6 +1,12 @@
 #include "stdafx.h"
-#include "../PumpkinLog/PumpkinLog.h"
-#include "PumpkinLog.h"
+#include "../PumpkinLog.h"
+#include "libPumpkinLog.h"
+/*
+#include <map>
+#include <string>
+#include <vector>
+#include <atlsafe.h>
+*/
 
 namespace PumpkinLog
 {

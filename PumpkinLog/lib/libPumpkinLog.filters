@@ -18,30 +18,24 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="PumpkinLog_1.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PumpkinLog_2.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PumpkinLog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\PumpkinLog.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\PumpkinLog\PumpkinLog_i.c">
+    <ClCompile Include="..\PumpkinLog_i.c">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="PumpkinLogLib.cpp">
+    <ClCompile Include="libPumpkinLog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
