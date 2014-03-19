@@ -172,8 +172,8 @@ STDMETHODIMP Logger::log2(
   VARIANT aVal1, VARIANT aVal2)
 {
   CComSafeArray<VARIANT> ar(2);
-  ar[1] = aVal1;
-  ar[0] = aVal2;
+  ar[0] = aVal1;
+  ar[1] = aVal2;
   return doLog(LT_LOG, ar);
 }
 
@@ -183,8 +183,8 @@ STDMETHODIMP Logger::debug2(
   VARIANT aVal1, VARIANT aVal2)
 {
   CComSafeArray<VARIANT> ar(2);
-  ar[1] = aVal1;
-  ar[0] = aVal2;
+  ar[0] = aVal1;
+  ar[1] = aVal2;
   return doLog(LT_DEBUG, ar);
 }
 
@@ -194,8 +194,8 @@ STDMETHODIMP Logger::info2(
   VARIANT aVal1, VARIANT aVal2)
 {
   CComSafeArray<VARIANT> ar(2);
-  ar[1] = aVal1;
-  ar[0] = aVal2;
+  ar[0] = aVal1;
+  ar[1] = aVal2;
   return doLog(LT_INFO, ar);
 }
 
@@ -205,8 +205,8 @@ STDMETHODIMP Logger::warn2(
   VARIANT aVal1, VARIANT aVal2)
 {
   CComSafeArray<VARIANT> ar(2);
-  ar[1] = aVal1;
-  ar[0] = aVal2;
+  ar[0] = aVal1;
+  ar[1] = aVal2;
   return doLog(LT_WARN, ar);
 }
 
@@ -216,8 +216,8 @@ STDMETHODIMP Logger::error2(
   VARIANT aVal1, VARIANT aVal2)
 {
   CComSafeArray<VARIANT> ar(2);
-  ar[1] = aVal1;
-  ar[0] = aVal2;
+  ar[0] = aVal1;
+  ar[1] = aVal2;
   return doLog(LT_ERROR, ar);
 }
 
@@ -227,9 +227,9 @@ STDMETHODIMP Logger::log3(
   VARIANT aVal1, VARIANT aVal2, VARIANT aVal3)
 {
   CComSafeArray<VARIANT> ar(3);
-  ar[2] = aVal1;
+  ar[0] = aVal1;
   ar[1] = aVal2;
-  ar[0] = aVal3;
+  ar[2] = aVal3;
   return doLog(LT_LOG, ar);
 }
 
@@ -239,9 +239,9 @@ STDMETHODIMP Logger::debug3(
   VARIANT aVal1, VARIANT aVal2, VARIANT aVal3)
 {
   CComSafeArray<VARIANT> ar(3);
-  ar[2] = aVal1;
+  ar[0] = aVal1;
   ar[1] = aVal2;
-  ar[0] = aVal3;
+  ar[2] = aVal3;
   return doLog(LT_DEBUG, ar);
 }
 
@@ -251,9 +251,9 @@ STDMETHODIMP Logger::info3(
   VARIANT aVal1, VARIANT aVal2, VARIANT aVal3)
 {
   CComSafeArray<VARIANT> ar(3);
-  ar[2] = aVal1;
+  ar[0] = aVal1;
   ar[1] = aVal2;
-  ar[0] = aVal3;
+  ar[2] = aVal3;
   return doLog(LT_INFO, ar);
 }
 
@@ -263,9 +263,9 @@ STDMETHODIMP Logger::warn3(
   VARIANT aVal1, VARIANT aVal2, VARIANT aVal3)
 {
   CComSafeArray<VARIANT> ar(3);
-  ar[2] = aVal1;
+  ar[0] = aVal1;
   ar[1] = aVal2;
-  ar[0] = aVal3;
+  ar[2] = aVal3;
   return doLog(LT_WARN, ar);
 }
 
@@ -275,9 +275,74 @@ STDMETHODIMP Logger::error3(
   VARIANT aVal1, VARIANT aVal2, VARIANT aVal3)
 {
   CComSafeArray<VARIANT> ar(3);
-  ar[2] = aVal1;
+  ar[0] = aVal1;
   ar[1] = aVal2;
-  ar[0] = aVal3;
+  ar[2] = aVal3;
+  return doLog(LT_ERROR, ar);
+}
+
+//----------------------------------------------------------------------------
+//  log4
+STDMETHODIMP Logger::log4(
+  VARIANT aVal1, VARIANT aVal2, VARIANT aVal3, VARIANT aVal4)
+{
+  CComSafeArray<VARIANT> ar(4);
+  ar[0] = aVal1;
+  ar[1] = aVal2;
+  ar[2] = aVal3;
+  ar[3] = aVal4;
+  return doLog(LT_LOG, ar);
+}
+
+//----------------------------------------------------------------------------
+//  debug4
+STDMETHODIMP Logger::debug4(
+  VARIANT aVal1, VARIANT aVal2, VARIANT aVal3, VARIANT aVal4)
+{
+  CComSafeArray<VARIANT> ar(4);
+  ar[0] = aVal1;
+  ar[1] = aVal2;
+  ar[2] = aVal3;
+  ar[3] = aVal4;
+  return doLog(LT_DEBUG, ar);
+}
+
+//----------------------------------------------------------------------------
+//  info4
+STDMETHODIMP Logger::info4(
+  VARIANT aVal1, VARIANT aVal2, VARIANT aVal3, VARIANT aVal4)
+{
+  CComSafeArray<VARIANT> ar(4);
+  ar[0] = aVal1;
+  ar[1] = aVal2;
+  ar[2] = aVal3;
+  ar[3] = aVal4;
+  return doLog(LT_INFO, ar);
+}
+
+//----------------------------------------------------------------------------
+//  warn4
+STDMETHODIMP Logger::warn4(
+  VARIANT aVal1, VARIANT aVal2, VARIANT aVal3, VARIANT aVal4)
+{
+  CComSafeArray<VARIANT> ar(4);
+  ar[0] = aVal1;
+  ar[1] = aVal2;
+  ar[2] = aVal3;
+  ar[3] = aVal4;
+  return doLog(LT_WARN, ar);
+}
+
+//----------------------------------------------------------------------------
+//  error4
+STDMETHODIMP Logger::error4(
+  VARIANT aVal1, VARIANT aVal2, VARIANT aVal3, VARIANT aVal4)
+{
+  CComSafeArray<VARIANT> ar(4);
+  ar[0] = aVal1;
+  ar[1] = aVal2;
+  ar[2] = aVal3;
+  ar[3] = aVal4;
   return doLog(LT_ERROR, ar);
 }
 
