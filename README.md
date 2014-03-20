@@ -20,7 +20,7 @@ The core runs as a singleton with the scope of a user-account.
 Installing
 ----------
 
-Currently there is no installer, you have to download a zip from the Releases -
+Currently there is no installer, you have to download a zip from the [Releases](https://github.com/IUnknown68/PumpkinLog/releases) -
 or build it from source - and register the logger manually. To do so open a 
 command prompt **as administrator**, navigate to the folder where you unzipped 
 PumpkinLog and type:
