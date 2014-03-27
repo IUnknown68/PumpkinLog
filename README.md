@@ -121,7 +121,16 @@ int itemCount;
 LPCWSTR itemType;
 logger << L"Roger, I have %i items of type %s" << itemCount << itemType << Logger::log;
 ```
-You can log everything that can be converted to a `VARIANT`. For the future I'm
-planning to add special handling for other types, e.g. `HRESULT`s.
+You can log everything that can be converted to a `VARIANT`.
+
+Also there are special types for logging `LRESULT` (Win32-errors) and `HRESULT`
+types.
+
+Special classes exist for this: `CLRESULT` and `CHRESULT`. Use them like this:
+```C++
+// from somewhere
+HRESULT hr;
+logger << L"Result:" << CHRESULT(hr) << Logger::log;
+```
 
 *to be continued...*
