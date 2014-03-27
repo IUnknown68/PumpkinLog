@@ -1,12 +1,7 @@
 #include "stdafx.h"
 #include "../PumpkinLog.h"
 #include "libPumpkinLog.h"
-/*
-#include <map>
-#include <string>
-#include <vector>
-#include <atlsafe.h>
-*/
+#include "ErrorStrings.h"
 
 namespace PumpkinLog
 {
@@ -62,6 +57,30 @@ public:
       return;
     }
     mEntries.push_back(aValue);
+  }
+
+  virtual void AddLRESULT(LRESULT res)
+  {
+    if (!mLogger) {
+      return;
+    }
+    CStringW s(DErrWin32(res));
+    if (s.IsEmpty()) {
+      s.Format(_T("%i"), res);
+    }
+    mEntries.push_back((LPCWSTR)s);
+  }
+
+  virtual void AddHRESULT(HRESULT hr)
+  {
+    if (!mLogger) {
+      return;
+    }
+    CStringW s(DErrHRESULT(hr));
+    if (s.IsEmpty()) {
+      s.Format(_T("0x%08x"), hr);
+    }
+    mEntries.push_back((LPCWSTR)s);
   }
 
   virtual HRESULT Init(LPCWSTR aName, LPCWSTR * aOptions, LONG aOptionsCount)

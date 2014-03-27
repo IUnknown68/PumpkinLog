@@ -17,6 +17,9 @@
     <ClInclude Include="..\PumpkinLog.h">
       <Filter>Imported Files</Filter>
     </ClInclude>
+    <ClInclude Include="ErrorStrings.h">
+      <Filter>lib</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -25,6 +28,9 @@
       <Filter>Imported Files</Filter>
     </ClCompile>
     <ClCompile Include="libPumpkinLog.cpp">
+      <Filter>lib</Filter>
+    </ClCompile>
+    <ClCompile Include="winerror_compact.cpp">
       <Filter>lib</Filter>
     </ClCompile>
   </ItemGroup>

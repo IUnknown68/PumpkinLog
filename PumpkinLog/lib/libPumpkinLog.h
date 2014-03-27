@@ -3,6 +3,20 @@
 namespace PumpkinLog
 {
 
+struct CLRESULT
+{
+  LRESULT m;
+  CLRESULT(LRESULT _) : m(_) {}
+  operator LRESULT() {return m;}
+};
+
+struct CHRESULT
+{
+  HRESULT m;
+  CHRESULT(HRESULT _) : m(_) {}
+  operator HRESULT() {return m;}
+};
+
 class Logger
 {
 public:
@@ -38,6 +52,12 @@ public:
     return *this;
   }
 
+  // operator << overloads for special types
+  Logger & operator << (CLRESULT res)
+      { mImplementation->AddLRESULT(res); return *this; }
+  Logger & operator << (CHRESULT hr)
+      { mImplementation->AddHRESULT(hr); return *this; }
+
   // operator << overloads for terminators
   Logger & operator << (_log)
       { mImplementation->DoLog(LT_LOG); return (*this); };
@@ -63,6 +83,8 @@ public:
   public:
     virtual void DoLog(Logger::LogFacility aFacility) = 0;
     virtual void AddValue(CComVariant & aValue) = 0;
+    virtual void AddHRESULT(HRESULT hr) = 0;
+    virtual void AddLRESULT(LRESULT res) = 0;
     virtual HRESULT Init(LPCWSTR aName, LPCWSTR * aOptions, LONG aOptionsCount) = 0;
   };
 
