@@ -18,3 +18,4 @@
 #include <vector>
 #include <atlsafe.h>
 
+#define DISPLAY_ALL_ERRORSTRINGS

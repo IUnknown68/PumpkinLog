@@ -120,4 +120,19 @@ STDMETHODIMP Server::onBucketGone(LPCWSTR aUri)
   return S_OK;
 }
 
+//----------------------------------------------------------------------------
+//  adviseExternalBucket
+STDMETHODIMP Server::adviseExternalBucket(LPCWSTR aUri, ILogBucket * aRetVal)
+{
+  return S_OK;
+}
+
+//----------------------------------------------------------------------------
+//  unadviseExternalBucket
+STDMETHODIMP Server::unadviseExternalBucket(LPCWSTR aUri)
+{
+  return S_OK;
+}
+
+
 } // namespace PumpkinLog

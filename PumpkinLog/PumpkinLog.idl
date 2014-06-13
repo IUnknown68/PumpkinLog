@@ -140,6 +140,8 @@ library PumpkinLogLib
     HRESULT onLoggerQuit([in] BSTR aName);
     HRESULT getBucket([in] LPCWSTR aUri, [out, retval] ILogBucket ** aRetVal);
     HRESULT onBucketGone([in] LPCWSTR aUri);
+    HRESULT adviseExternalBucket([in] LPCWSTR aUri, [in] ILogBucket * aRetVal);
+    HRESULT unadviseExternalBucket([in] LPCWSTR aUri);
   };
 
 

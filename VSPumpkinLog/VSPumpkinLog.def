@@ -1,0 +1,7 @@
+﻿; VSPumpkinLog.def : Declares the module parameters.
+
+LIBRARY      "VSPumpkinLog.DLL"
+
+EXPORTS
+	DllCanUnloadNow            PRIVATE
+	DllGetClassObject          PRIVATE

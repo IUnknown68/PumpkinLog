@@ -50,6 +50,8 @@ public:
   STDMETHOD(onLoggerQuit)(BSTR aName);
   STDMETHOD(getBucket)(LPCWSTR aUri, ILogBucket ** aRetVal);
   STDMETHOD(onBucketGone)(LPCWSTR aUri);
+  STDMETHOD(adviseExternalBucket)(LPCWSTR aUri, ILogBucket * aRetVal);
+  STDMETHOD(unadviseExternalBucket)(LPCWSTR aUri);
 
 private:
   typedef HRESULT (Server::*TCreateBucket)(LPCWSTR, CComPtr<ILogBucket> &);

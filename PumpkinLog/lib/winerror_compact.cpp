@@ -10,6 +10,7 @@ LPCTSTR _DErr_Default(DWORD aError)
 
 LPCTSTR DErrFACILITY(HRESULT aError)
 {
+#ifdef DISPLAY_FACILITY
   switch(HRESULT_FACILITY(aError)) {
     case 82: return _T("FACILITY_XPS");
     case 51: return _T("FACILITY_WINRM");
@@ -67,11 +68,13 @@ LPCTSTR DErrFACILITY(HRESULT aError)
     case 20: return _T("FACILITY_ACS");
     case 18: return _T("FACILITY_AAF");
   };
+#endif
   return _T("");
 }
 
 LPCTSTR DErrWin32(LRESULT aError)
 {
+#ifdef DISPLAY_WIN32_ERR
   switch(aError) {
     case 0: return _T("ERROR_SUCCESS");
     case 1: return _T("ERROR_INVALID_FUNCTION");
@@ -2622,20 +2625,24 @@ LPCTSTR DErrWin32(LRESULT aError)
     case 15300: return _T("ERROR_HASH_NOT_SUPPORTED");
     case 15301: return _T("ERROR_HASH_NOT_PRESENT");
   };
+#endif
   return DErrWin32Default(aError);
 }
 
 LPCTSTR DErrSEVERITY(HRESULT aError)
 {
+#ifdef DISPLAY_SEVERITY
   switch(HRESULT_SEVERITY(aError)) {
     case 0: return _T("SEVERITY_SUCCESS");
     case 1: return _T("SEVERITY_ERROR");
   };
+#endif
   return _T("");
 }
 
 LPCTSTR DErrHRESULT(HRESULT aError)
 {
+#ifdef DISPLAY_HRESULT
   switch(aError) {
     case 0: return _T("S_OK");
     case 1: return _T("S_FALSE");
@@ -4799,6 +4806,7 @@ LPCTSTR DErrHRESULT(HRESULT aError)
     case 0x802A0109L: return _T("UI_E_TIME_BEFORE_LAST_UPDATE"); 
     case 0x802A010AL: return _T("UI_E_TIMER_CLIENT_ALREADY_CONNECTED"); 
   };
+#endif
   return DErrHRESULTDefault(aError);
 }
 

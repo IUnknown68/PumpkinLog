@@ -90,7 +90,7 @@ LRESULT LogWindow::OnCmdExit(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*
       s = _T("There is still one logger connected.");
     }
     else {
-      s.Format(_T("There are still %i loggers connected.\nExiting now will disconnect them ungraceful\n\nAre you sure you want to quit?"), mLoggerRefcount);
+      s.Format(_T("There are still %i loggers connected."), mLoggerRefcount);
     }
     s += _T("\nExiting now will disconnect ungraceful.\n\nAre you sure you want to quit?");
     if (IDYES != MessageBox(s, L"Exiting PumpkinLog", MB_YESNO|MB_ICONQUESTION)) {
