@@ -279,6 +279,7 @@ END
 STRINGTABLE
 BEGIN
     IDCLOSE                 "Close the current window\nClose"
+    ID_PANENUMCLIENTS       "1000 clients"
 END
 
 #endif    // English (United States) resources

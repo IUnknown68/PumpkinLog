@@ -32,6 +32,7 @@ CExeModule
 #include <atlframe.h>
 #include <atlctrls.h>
 #include <atlctrlw.h>
+#include <atlctrlx.h>
 #include <atldlgs.h>
 #include <atltime.h>
 #include <atlsafe.h>

@@ -68,8 +68,12 @@ public:
   STDMETHOD(onLoggerLog)(LogFacility aFacility, LPCWSTR aName, SAFEARRAY * pVals);
 
 private:
+  void UpdateStatusbar();
+
+private:
   ULONG mLoggerRefcount;
 	CCommandBarCtrl m_CmdBar;
+  CMultiPaneStatusBarCtrl m_wndStatusBar;
   LogView m_view;
   CComPtr<ILogServerInternal> mServer;
   CComPtr<ILogBucket> mContainer;

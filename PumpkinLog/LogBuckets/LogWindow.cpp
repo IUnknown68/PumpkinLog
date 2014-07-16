@@ -37,7 +37,12 @@ LRESULT LogWindow::OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/,
 
 	HWND hWndToolBar = CreateSimpleToolBarCtrl(m_hWnd, IDR_MAINFRAME, FALSE, ATL_SIMPLE_TOOLBAR_PANE_STYLE);
 
-	CreateSimpleReBar(ATL_SIMPLE_REBAR_NOBORDER_STYLE);
+	m_hWndStatusBar = m_wndStatusBar.Create(*this);
+  int anPanes[] = {ID_DEFAULT_PANE, ID_PANENUMCLIENTS};
+  m_wndStatusBar.SetPanes(anPanes, 2, false);
+  UpdateStatusbar();
+
+  CreateSimpleReBar(ATL_SIMPLE_REBAR_NOBORDER_STYLE);
 	AddSimpleReBarBand(hWndCmdBar);
 	AddSimpleReBarBand(hWndToolBar, NULL, TRUE);
 
@@ -114,6 +119,12 @@ LRESULT LogWindow::OnCmdCopy(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*
   return 0;
 }
 
+void LogWindow::UpdateStatusbar()
+{
+  CStringW s;
+  s.Format(L"%i clients", mLoggerRefcount);
+  m_wndStatusBar.SetPaneText(ID_PANENUMCLIENTS, s);
+}
 
 //----------------------------------------------------------------------------
 //----------------------------------------------------------------------------
@@ -144,6 +155,7 @@ STDMETHODIMP LogWindow::init(LPCWSTR aUri, ILogBucket * aContainer, ILogServerIn
 STDMETHODIMP_(ULONG) LogWindow::addRefLogger(LPCWSTR aName)
 {
   ++mLoggerRefcount;
+  UpdateStatusbar();
   CComSafeArray<VARIANT> ar(1);
   CStringW s;
   s.Format(L"Client \"%s\" connected. Have %i clients now.", aName, mLoggerRefcount);
@@ -157,6 +169,7 @@ STDMETHODIMP_(ULONG) LogWindow::addRefLogger(LPCWSTR aName)
 STDMETHODIMP_(ULONG) LogWindow::removeRefLogger(LPCWSTR aName)
 {
   --mLoggerRefcount;
+  UpdateStatusbar();
   CComSafeArray<VARIANT> ar(1);
   CStringW s;
   s.Format(L"Client \"%s\" disconnected. Have %i clients now.", aName, mLoggerRefcount);

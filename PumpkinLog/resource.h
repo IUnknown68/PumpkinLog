@@ -2,6 +2,7 @@
 // Microsoft Visual C++ generated include file.
 // Used by PumpkinLog.rc
 //
+#define ID_PANENUMCLIENTS               9
 #define IDS_PROJNAME                    100
 #define IDR_PUMPKINLOG                  100
 #define IDD_ABOUTBOX                    100
