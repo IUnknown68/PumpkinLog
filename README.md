@@ -41,6 +41,7 @@ exist both in 32 and 64bit.
 Usage
 -----
 
+
 You create (or get, in case it exists already) your logger by creating a
 `PumpkinLog.Server` object and calling `createLogger` on it.
 
