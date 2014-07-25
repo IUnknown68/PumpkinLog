@@ -9,10 +9,10 @@ JavaScript, VBScript etc.
 Multiple "buckets" for logging are supported, so you can setup a logger to log
 to e.g. a window and a file at the same time.
 
-Multiple loggers can be created, where a certain logger is identified by its 
+Multiple loggers can be created, where a certain logger is identified by its
 name.
 
-A certain logger can be used from multiple locations, even from different 
+A certain logger can be used from multiple locations, even from different
 processes.
 
 The core runs as a singleton with the scope of a user-account.
@@ -20,9 +20,10 @@ The core runs as a singleton with the scope of a user-account.
 Installing
 ----------
 
+
 Currently there is no installer, you have to download a zip from the [Releases](https://github.com/IUnknown68/PumpkinLog/releases) -
-or build it from source - and register the logger manually. To do so open a 
-command prompt **as administrator**, navigate to the folder where you unzipped 
+or build it from source - and register the logger manually. To do so open a
+command prompt **as administrator**, navigate to the folder where you unzipped
 PumpkinLog and type:
 ```
 PumpkinLog.exe /RegServer
@@ -79,7 +80,7 @@ in your browser. It has the methods:
 - error
 
 All these methods take any number of arguments, they will joined together by
-spaces. 
+spaces.
 
 It also supports simple printf-like string substitution patterns as specified in
 the [CommonJS-specs](http://wiki.commonjs.org/wiki/Console).
