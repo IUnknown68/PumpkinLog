@@ -39,11 +39,6 @@ CExeModule
 #include <atlfile.h>
 #include <Urlmon.h>
 
-#include <string>
-#include <map>
-#include <unordered_map>
-#include <functional>
-
 #include <ajvar.h>
 
 #if defined _M_IX86
