@@ -10,8 +10,8 @@ namespace LogBucket {
 class LogViewRE : public CWindowImpl<LogViewRE, CRichEditCtrl>
 {
 public:
-  void Log(LogFacility logType, LPCWSTR aName, SAFEARRAY* pVals);
-  void Log(LogFacility logType, LPCWSTR aName, VARIANT vtValue);
+  void Log(LogFacility logType, LPCWSTR aName, SAFEARRAY* pVals, LPDISPATCH pOptions);
+  void Log(LogFacility logType, LPCWSTR aName, VARIANT vtValue, LPDISPATCH pOptions);
   void ClearLog();
   void SaveAs();
 

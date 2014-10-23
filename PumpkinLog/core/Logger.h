@@ -37,11 +37,13 @@ public:
   HRESULT init(LPCWSTR aName, SAFEARRAY* aLogBucketURIs, ILogServerInternal * aLogServer);
 
 public:
+  STDMETHOD(llLog)(SAFEARRAY* pVals);
   STDMETHOD(log)(SAFEARRAY* pVals);
   STDMETHOD(debug)(SAFEARRAY* pVals);
   STDMETHOD(info)(SAFEARRAY* pVals);
   STDMETHOD(warn)(SAFEARRAY* pVals);
   STDMETHOD(error)(SAFEARRAY* pVals);
+  STDMETHOD(loglow)(LONG nFacility, LPDISPATCH pArVals);
 
   STDMETHOD(log1)(VARIANT aVal1);
   STDMETHOD(debug1)(VARIANT aVal1);
@@ -68,7 +70,7 @@ public:
   STDMETHOD(error4)(VARIANT aVal1, VARIANT aVal2, VARIANT aVal3, VARIANT aVal4);
 
 private:
-  HRESULT doLog(LogFacility aFacility, SAFEARRAY * pVals);
+  HRESULT doLog(LogFacility aFacility, SAFEARRAY * pVals, LPDISPATCH pOptions);
 
 private:
   typedef std::map<std::wstring, CComPtr<ILogBucket> > LogBucketMap;

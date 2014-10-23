@@ -77,6 +77,7 @@ public:
     LT_INFO     = 3,
     LT_WARN     = 4,
     LT_ERROR    = 5
+    /*,LT_CUSTOM   = 1000*/ // this is not used here
   };
 
   class IImplementation {

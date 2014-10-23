@@ -58,16 +58,16 @@ private:
   {
     // create container
     LogBucket::Container::_ComObject * newContainer = NULL;
-    IF_FAILED_RET(LogBucket::Container::_ComObject::CreateInstance(&newContainer));
+    IF_FAILED_RET_HR(LogBucket::Container::_ComObject::CreateInstance(&newContainer));
     CComPtr<ILogBucket> containerOwner(newContainer);
 
     // create target
     T::_ComObject * newTarget = NULL;
-    IF_FAILED_RET(T::_ComObject::CreateInstance(&newTarget));
+    IF_FAILED_RET_HR(T::_ComObject::CreateInstance(&newTarget));
     CComPtr<ILogBucket> targetOwner(newTarget);
 
     // init container
-    IF_FAILED_RET(newContainer->init(aUri, targetOwner, this));
+    IF_FAILED_RET_HR(newContainer->init(aUri, targetOwner, this));
 
     aRetVal = containerOwner;
     return S_OK;

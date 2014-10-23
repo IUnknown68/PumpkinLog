@@ -33,6 +33,11 @@ public:
     mEntries.clear();
 
     switch(aFacility) {
+/* not used
+      case LT_CUSTOM:
+        mLogger->llLog(nullptr, options);
+        break;
+*/
       case LT_LOG:
         mLogger->log(options);
         break;

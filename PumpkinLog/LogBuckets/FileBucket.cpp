@@ -22,10 +22,10 @@ STDMETHODIMP FileBucket::init(LPCWSTR aUri, ILogBucket * aContainer, ILogServerI
   mName = aUri;
   CStringW filePath;
   DWORD resultLength = 0;
-  IF_FAILED_RET(CoInternetParseUrl(aUri, PARSE_PATH_FROM_URL, 0, filePath.GetBuffer(MAX_PATH), MAX_PATH, &resultLength, 0));
+  IF_FAILED_RET_HR(CoInternetParseUrl(aUri, PARSE_PATH_FROM_URL, 0, filePath.GetBuffer(MAX_PATH), MAX_PATH, &resultLength, 0));
   filePath.ReleaseBuffer();
 
-  IF_FAILED_RET(mFile.Create(filePath, GENERIC_WRITE, FILE_SHARE_WRITE, OPEN_ALWAYS));
+  IF_FAILED_RET_HR(mFile.Create(filePath, GENERIC_WRITE, FILE_SHARE_WRITE, OPEN_ALWAYS));
   mFile.Seek(0, FILE_END);
 
   return S_OK;
@@ -47,7 +47,7 @@ STDMETHODIMP_(ULONG) FileBucket::removeRefLogger(LPCWSTR aName)
 
 //----------------------------------------------------------------------------
 //  onLoggerLog
-STDMETHODIMP FileBucket::onLoggerLog(LogFacility aFacility, LPCWSTR aName, SAFEARRAY * pVals)
+STDMETHODIMP FileBucket::onLoggerLog(LogFacility aFacility, LPCWSTR aName, SAFEARRAY * pVals, LPDISPATCH pOptions)
 {
   EXPECTED_(mFile);
 

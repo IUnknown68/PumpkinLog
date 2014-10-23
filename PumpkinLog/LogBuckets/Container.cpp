@@ -27,7 +27,7 @@ STDMETHODIMP Container::init(LPCWSTR aUri, ILogBucket * aTarget, ILogServerInter
 
   // init target
   if (mTarget) {
-    IF_FAILED_RET(mTarget->init(aUri, this, aLogServer));
+    IF_FAILED_RET_HR(mTarget->init(aUri, this, aLogServer));
   }
 
   return S_OK;
@@ -49,9 +49,9 @@ STDMETHODIMP_(ULONG) Container::removeRefLogger(LPCWSTR aName)
 
 //----------------------------------------------------------------------------
 //  onLoggerLog
-STDMETHODIMP Container::onLoggerLog(LogFacility aFacility, LPCWSTR aName, SAFEARRAY * pVals)
+STDMETHODIMP Container::onLoggerLog(LogFacility aFacility, LPCWSTR aName, SAFEARRAY * pVals, LPDISPATCH pOptions)
 {
-  return (mTarget) ? mTarget->onLoggerLog(aFacility, aName, pVals) : E_UNEXPECTED;
+  return (mTarget) ? mTarget->onLoggerLog(aFacility, aName, pVals, pOptions) : E_UNEXPECTED;
 }
 
 } // namespace LogBucket

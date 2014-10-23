@@ -140,7 +140,7 @@ void LogViewRE::LogVariant(VARIANT & value)
   AppendText(vt.bstrVal);
 }
 
-void LogViewRE::Log(LogFacility logType, LPCWSTR aName, SAFEARRAY* pVals)
+void LogViewRE::Log(LogFacility logType, LPCWSTR aName, SAFEARRAY* pVals, LPDISPATCH pOptions)
 {
   LogIntro(logType, aName);
 
@@ -289,7 +289,7 @@ void LogViewRE::Log(LogFacility logType, LPCWSTR aName, SAFEARRAY* pVals)
   LogExtro();
 }
 
-void LogViewRE::Log(LogFacility logType, LPCWSTR aName, VARIANT vtValue)
+void LogViewRE::Log(LogFacility logType, LPCWSTR aName, VARIANT vtValue, LPDISPATCH pOptions)
 {
   LogIntro(logType, aName);
   LogVariant(vtValue);

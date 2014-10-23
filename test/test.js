@@ -26,3 +26,6 @@ console.info("An object %o", undefined);
 
 console.warn("Expected text, but have number: '%s'", 123);
 console.warn("Expected number, but have text: '%i'", "Hello");
+
+var ll = 1;
+console.loglow(ll, ["Lowlevel logging", ll]);

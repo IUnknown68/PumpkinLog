@@ -160,7 +160,7 @@ STDMETHODIMP_(ULONG) LogWindow::addRefLogger(LPCWSTR aName)
   CStringW s;
   s.Format(L"Client \"%s\" connected. Have %i clients now.", aName, mLoggerRefcount);
   ar[0] = s;
-  m_view.Log(LT_INTERNAL, aName, ar);
+  m_view.Log(LT_INTERNAL, aName, ar, nullptr);
   return mLoggerRefcount;
 }
 
@@ -174,15 +174,15 @@ STDMETHODIMP_(ULONG) LogWindow::removeRefLogger(LPCWSTR aName)
   CStringW s;
   s.Format(L"Client \"%s\" disconnected. Have %i clients now.", aName, mLoggerRefcount);
   ar[0] = s;
-  m_view.Log(LT_INTERNAL, aName, ar);
+  m_view.Log(LT_INTERNAL, aName, ar, nullptr);
   return mLoggerRefcount;
 }
 
 //----------------------------------------------------------------------------
 //  onLoggerLog
-STDMETHODIMP LogWindow::onLoggerLog(LogFacility aFacility, LPCWSTR aName, SAFEARRAY * pVals)
+STDMETHODIMP LogWindow::onLoggerLog(LogFacility aFacility, LPCWSTR aName, SAFEARRAY * pVals, LPDISPATCH pOptions)
 {
-  m_view.Log(aFacility, aName, pVals);
+  m_view.Log(aFacility, aName, pVals, pOptions);
   return S_OK;
 }
 

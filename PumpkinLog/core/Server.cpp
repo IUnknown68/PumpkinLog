@@ -41,7 +41,7 @@ STDMETHODIMP Server::createLogger(BSTR aName, SAFEARRAY* pVals, IDispatch ** aRe
     logger = newLogger;
 
     // one-time init
-    IF_FAILED_RET(logger->init(aName, pVals, this));
+    IF_FAILED_RET_HR(logger->init(aName, pVals, this));
     mLoggers[name] = logger;
   }
   (*aRetVal) = instance.Detach();

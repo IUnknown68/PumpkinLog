@@ -20,29 +20,39 @@ interface ILogServerInternal;
 interface ILoggerDispatch : IDispatch
 {
   [id(1), helpstring(
+    "Method llLog"
+  ), vararg]
+  HRESULT llLog([in] SAFEARRAY(VARIANT) pVals);
+
+  [id(2), helpstring(
     "Method log"
   ), vararg]
   HRESULT log([in] SAFEARRAY(VARIANT) pVals);
 
-  [id(2), helpstring(
+  [id(3), helpstring(
     "Method debug"
   ), vararg]
   HRESULT debug([in] SAFEARRAY(VARIANT) pVals);
 
-  [id(3), helpstring(
+  [id(4), helpstring(
     "Method info"
   ), vararg]
   HRESULT info([in] SAFEARRAY(VARIANT) pVals);
 
-  [id(4), helpstring(
+  [id(5), helpstring(
     "Method warn"
   ), vararg]
   HRESULT warn([in] SAFEARRAY(VARIANT) pVals);
 
-  [id(5), helpstring(
+  [id(6), helpstring(
     "Method error"
   ), vararg]
   HRESULT error([in] SAFEARRAY(VARIANT) pVals);
+
+  [id(7), helpstring(
+    "Method loglow"
+  )]
+  HRESULT loglow([in] LONG nFacility, [in] LPDISPATCH pArVals);
 };
 
 [
@@ -112,7 +122,8 @@ library PumpkinLogLib
     LT_DEBUG    = 2,
     LT_INFO     = 3,
     LT_WARN     = 4,
-    LT_ERROR    = 5
+    LT_ERROR    = 5,
+    LT_CUSTOM   = 1000
   } LogFacility;
 
   [
@@ -126,7 +137,7 @@ library PumpkinLogLib
     HRESULT init([in] LPCWSTR aUri, [in] ILogBucket * aContainer, [in] ILogServerInternal * aLogServer);
     ULONG addRefLogger([in] LPCWSTR aName);
     ULONG removeRefLogger([in] LPCWSTR aName);
-    HRESULT onLoggerLog([in] LogFacility aFacility, [in] LPCWSTR aName, [in] SAFEARRAY * pVals);
+    HRESULT onLoggerLog([in] LogFacility aFacility, [in] LPCWSTR aName, [in] SAFEARRAY * pVals, [in] LPDISPATCH pOptions);
   };
 
   [

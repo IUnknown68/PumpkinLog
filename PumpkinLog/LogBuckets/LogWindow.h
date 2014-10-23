@@ -65,7 +65,7 @@ public:
   STDMETHOD(init)(LPCWSTR aUri, ILogBucket * aContainer, ILogServerInternal * aLogServer);
   STDMETHOD_(ULONG, addRefLogger)(LPCWSTR aName);
   STDMETHOD_(ULONG, removeRefLogger)(LPCWSTR aName);
-  STDMETHOD(onLoggerLog)(LogFacility aFacility, LPCWSTR aName, SAFEARRAY * pVals);
+  STDMETHOD(onLoggerLog)(LogFacility aFacility, LPCWSTR aName, SAFEARRAY * pVals, LPDISPATCH pOptions);
 
 private:
   void UpdateStatusbar();
