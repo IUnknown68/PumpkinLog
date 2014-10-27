@@ -21,6 +21,9 @@ void LogWindow::OnFinalMessage(HWND)
 
 BOOL LogWindow::PreTranslateMessage(MSG* pMsg)
 {
+  if (pMsg->hwnd != m_hWnd) {
+    return FALSE;
+  }
   return CFrameWindowImpl<LogWindow>::PreTranslateMessage(pMsg);
 }
 
@@ -134,6 +137,7 @@ void LogWindow::UpdateStatusbar()
 //  init
 STDMETHODIMP LogWindow::init(LPCWSTR aUri, ILogBucket * aContainer, ILogServerInternal * aLogServer)
 {
+  ATLTRACE(L"NEW LogWindow: 0x%08x\n", this);
   mName = aUri;
   mServer = aLogServer;
   if (!CreateEx())
@@ -141,7 +145,7 @@ STDMETHODIMP LogWindow::init(LPCWSTR aUri, ILogBucket * aContainer, ILogServerIn
     return E_FAIL;
   }
   // holding a ref to container keeps us alive, because container
-  // hold a ref to us
+  // holds a ref to us
   mContainer = aContainer;
   CStringW name;
   name.Format(_T("LogWindow - %s"), mName);

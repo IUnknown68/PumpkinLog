@@ -2622,7 +2622,7 @@ LPCTSTR DErrWin32(LRESULT aError)
     case 15300: return _T("ERROR_HASH_NOT_SUPPORTED");
     case 15301: return _T("ERROR_HASH_NOT_PRESENT");
   };
-  return DErrWin32Default(aError);
+  return DErrWin32Default(static_cast<DWORD>(aError));
 }
 
 LPCTSTR DErrSEVERITY(HRESULT aError)
