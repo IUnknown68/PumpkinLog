@@ -4,6 +4,9 @@ function UserInput( myPrompt ) {
 }
 
 var console = WScript.CreateObject("PumpkinLog.Server").createLogger("logger1", "window://default/");
+var console2 = WScript.CreateObject("PumpkinLog.Server").createLogger("logger2", "window://other/");
+
+/*
 //var console = WScript.CreateObject("PumpkinLog.Server").createLogger("logger1", "window://default/", "file://U:\\Users\\Hans\\Documents\\Visual Studio 2010\\Projects\\PumpkinLog\\test.log");
 //var console = WScript.CreateObject("PumpkinLog.Server").createLogger("logger1", "http://3.arne.internal.salsitasoft.com/");
 //var console = WScript.CreateObject("PumpkinLog.Server").createLogger("logger1", "file://C:/Users/Arne/Documents/Visual Studio 2010/Projects/PumpkinLog/testlog.txt");
@@ -29,3 +32,7 @@ console.warn("Expected number, but have text: '%i'", "Hello");
 
 var ll = 1;
 console.loglow(ll, ["Lowlevel logging", ll]);
+*/
+
+console.log("one");
+console2.log("two");

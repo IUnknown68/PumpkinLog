@@ -129,6 +129,13 @@ void LogWindow::UpdateStatusbar()
   m_wndStatusBar.SetPaneText(ID_PANENUMCLIENTS, s);
 }
 
+void LogWindow::BringToFront()
+{
+  ShowWindow(SW_SHOWNOACTIVATE);
+  SetWindowPos(HWND_TOPMOST, 0, 0, 0, 0, SWP_SHOWWINDOW | SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+  SetWindowPos(HWND_NOTOPMOST, 0, 0, 0, 0, SWP_SHOWWINDOW | SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+}
+
 //----------------------------------------------------------------------------
 //----------------------------------------------------------------------------
 // ILogBucket implementation
@@ -160,6 +167,7 @@ STDMETHODIMP_(ULONG) LogWindow::addRefLogger(LPCWSTR aName)
 {
   ++mLoggerRefcount;
   UpdateStatusbar();
+  BringToFront();
   CComSafeArray<VARIANT> ar(1);
   CStringW s;
   s.Format(L"Client \"%s\" connected. Have %i clients now.", aName, mLoggerRefcount);

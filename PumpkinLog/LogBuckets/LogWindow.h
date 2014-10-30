@@ -69,6 +69,7 @@ public:
 
 private:
   void UpdateStatusbar();
+  void BringToFront();
 
 private:
   ULONG mLoggerRefcount;
