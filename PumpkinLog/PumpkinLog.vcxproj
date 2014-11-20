@@ -37,14 +37,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IntDir>$(Configuration)_$(PlatformName)\</IntDir>
-    <OutDir>$(SolutionDir)$(Configuration)_$(PlatformName)\</OutDir>
+    <IntDir>$(SolutionDir)build\$(ProjectName)\$(Configuration)_$(PlatformName)\</IntDir>
+    <OutDir>$(SolutionDir)deploy\$(Configuration)_$(PlatformName)\</OutDir>
     <LinkIncremental>true</LinkIncremental>
     <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IntDir>$(Configuration)_$(PlatformName)\</IntDir>
-    <OutDir>$(SolutionDir)$(Configuration)_$(PlatformName)\</OutDir>
+    <IntDir>$(SolutionDir)build\$(ProjectName)\$(Configuration)_$(PlatformName)\</IntDir>
+    <OutDir>$(SolutionDir)deploy\$(Configuration)_$(PlatformName)\</OutDir>
     <LinkIncremental>false</LinkIncremental>
     <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
   </PropertyGroup>
