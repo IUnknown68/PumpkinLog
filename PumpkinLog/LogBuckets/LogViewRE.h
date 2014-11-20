@@ -4,25 +4,58 @@
 #include "resource.h"       // main symbols
 #include "PumpkinLog.h"
 
+#include "WindowManager.h"
+
+
 namespace PumpkinLog {
 namespace LogBucket {
 
-class LogViewRE : public CWindowImpl<LogViewRE, CRichEditCtrl>
+class LogViewRE :
+  public CComObjectRootEx<CComSingleThreadModel>,
+  public CWindowImpl<LogViewRE, CRichEditCtrl>,
+  public ILogBucket
 {
 public:
+  typedef CComObject<LogViewRE>  _ComObject;
+
+public:
+  LogViewRE() : mLoggerRefcount(0)
+  {
+  }
+
+  virtual void OnFinalMessage(HWND aHWND);
   void Log(LogFacility logType, LPCWSTR aName, SAFEARRAY* pVals, LPDISPATCH pOptions);
   void Log(LogFacility logType, LPCWSTR aName, VARIANT vtValue, LPDISPATCH pOptions);
   void ClearLog();
   void SaveAs();
+
+  HRESULT FinalConstruct();
+	void PenultimateRelease();
+  void FinalRelease();
 
 public:
   DECLARE_WND_SUPERCLASS(NULL, CRichEditCtrl::GetWndClassName())
 
   BEGIN_MSG_MAP(LogViewRE)
     MESSAGE_HANDLER(WM_CREATE, OnCreate)
+    MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
+		COMMAND_ID_HANDLER(ID_EDIT_CLEAR_ALL, OnCmdClearLog)
   END_MSG_MAP()
 
   LRESULT OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+  LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
+	LRESULT OnCmdClearLog(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
+
+  DECLARE_PROTECT_FINAL_CONSTRUCT()
+
+  BEGIN_COM_MAP(LogViewRE)
+    COM_INTERFACE_ENTRY(ILogBucket)
+  END_COM_MAP()
+
+  STDMETHOD(init)(LPCWSTR aUri, ILogBucket * aContainer, ILogServerInternal * aLogServer);
+  STDMETHOD_(ULONG, addRefLogger)(LPCWSTR aName);
+  STDMETHOD_(ULONG, removeRefLogger)(LPCWSTR aName);
+  STDMETHOD(onLoggerLog)(LogFacility aFacility, LPCWSTR aName, SAFEARRAY * pVals, LPDISPATCH pOptions);
 
 private:
   enum FileType {
@@ -76,6 +109,11 @@ private:
   void LogExtro();
 
   CFont mFont;
+  ULONG mLoggerRefcount;
+  CComPtr<ILogServerInternal> mServer;
+  CComPtr<ILogBucket> mContainer;
+  CStringW  mName;
+  CComPtr<ILogWindow> mFrameWindow;
 
 };
 

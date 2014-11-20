@@ -23,6 +23,24 @@ DWORD CALLBACK LogViewRE::StreamFileOut(DWORD_PTR dwCookie, LPBYTE pbBuff, LONG 
   return file->Write(pbBuff, cb, (DWORD*)pcb);
 }
 
+HRESULT LogViewRE::FinalConstruct()
+{
+  return S_OK;
+}
+
+void LogViewRE::FinalRelease()
+{
+}
+
+void LogViewRE::OnFinalMessage(HWND aHWND)
+{
+  // window gone, release container, it will release us
+  if (mFrameWindow && false) {
+    mFrameWindow->removeTab(aHWND);
+  }
+  mContainer.Release();
+}
+
 LRESULT LogViewRE::OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
 {
   DefWindowProc();
@@ -64,6 +82,17 @@ LRESULT LogViewRE::OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/,
   pf.dwMask = PFM_TABSTOPS;
   SetParaFormat(pf);
 
+  return 0;
+}
+
+LRESULT LogViewRE::OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+{
+  return 0;
+}
+
+LRESULT LogViewRE::OnCmdClearLog(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+{
+  ClearLog();
   return 0;
 }
 
@@ -324,6 +353,81 @@ void LogViewRE::SaveAs()
 
   EDITSTREAM eds = {(DWORD_PTR)&file, 0, StreamFileOut};
   StreamOut(format, eds);
+}
+
+//----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
+// ILogBucket implementation
+
+//----------------------------------------------------------------------------
+//  init
+STDMETHODIMP LogViewRE::init(LPCWSTR aUri, ILogBucket * aContainer, ILogServerInternal * aLogServer)
+{
+  ATLTRACE(L"NEW LogViewRE: 0x%08x\n", this);
+  mName = aUri;
+  mServer = aLogServer;
+  ATLASSERT(!mFrameWindow);
+  IF_FAILED_RET_HR(WindowManager::instance().GetDefault(mFrameWindow));
+  HWND hwndParent = nullptr;
+  IF_FAILED_RET_HR(mFrameWindow->getHWND(&hwndParent));
+
+  HWND h = Create(hwndParent, rcDefault, NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_HSCROLL | WS_VSCROLL | ES_AUTOHSCROLL | ES_AUTOVSCROLL | ES_MULTILINE | ES_NOHIDESEL | ES_SAVESEL);
+  if (nullptr == h) {
+    return E_FAIL;
+  }
+
+  IF_FAILED_RET_HR(mFrameWindow->addTab(m_hWnd, mName));
+/*
+  if (!CreateEx())
+  {
+    return E_FAIL;
+  }
+*/
+  // holding a ref to container keeps us alive, because container
+  // holds a ref to us
+  mContainer = aContainer;
+  CStringW name;
+  name.Format(_T("LogViewRE - %s"), mName);
+  SetWindowText(name);
+  ShowWindow(SW_SHOW);
+  return S_OK;
+}
+
+//----------------------------------------------------------------------------
+//  addRefLogger
+STDMETHODIMP_(ULONG) LogViewRE::addRefLogger(LPCWSTR aName)
+{
+  ++mLoggerRefcount;
+  //UpdateStatusbar();
+  //BringToFront();
+  CComSafeArray<VARIANT> ar(1);
+  CStringW s;
+  s.Format(L"Client \"%s\" connected. Have %i clients now.", aName, mLoggerRefcount);
+  ar[0] = s;
+  //m_view.Log(LT_INTERNAL, aName, ar, nullptr);
+  return mLoggerRefcount;
+}
+
+//----------------------------------------------------------------------------
+//  removeRefLogger
+STDMETHODIMP_(ULONG) LogViewRE::removeRefLogger(LPCWSTR aName)
+{
+  --mLoggerRefcount;
+  //UpdateStatusbar();
+  CComSafeArray<VARIANT> ar(1);
+  CStringW s;
+  s.Format(L"Client \"%s\" disconnected. Have %i clients now.", aName, mLoggerRefcount);
+  ar[0] = s;
+  //m_view.Log(LT_INTERNAL, aName, ar, nullptr);
+  return mLoggerRefcount;
+}
+
+//----------------------------------------------------------------------------
+//  onLoggerLog
+STDMETHODIMP LogViewRE::onLoggerLog(LogFacility aFacility, LPCWSTR aName, SAFEARRAY * pVals, LPDISPATCH pOptions)
+{
+  //m_view.Log(aFacility, aName, pVals, pOptions);
+  return S_OK;
 }
 
 } // namespace LogBucket

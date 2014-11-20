@@ -128,6 +128,20 @@ library PumpkinLogLib
 
   [
 	  object,
+	  uuid(8904EB56-064E-4581-ACAC-ADDA085E0394),
+	  helpstring("ILogWindow Interface"),
+	  pointer_default(unique)
+  ]
+  interface ILogWindow : IUnknown
+  {
+    HRESULT init([in] LPCWSTR aName);
+    HRESULT getHWND([out, retval] HWND * aRetVal);
+    HRESULT addTab([in] HWND aHWND, [in] LPCWSTR aName);
+    HRESULT removeTab([in] HWND aHWND);
+  };
+
+  [
+	  object,
 	  uuid(CF69F643-A8D9-4155-8EA1-FB0EFD2985C5),
 	  helpstring("ILogBucket Interface"),
 	  pointer_default(unique)

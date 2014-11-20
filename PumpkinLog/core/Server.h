@@ -7,7 +7,7 @@
 #include "resource.h"       // main symbols
 #include "PumpkinLog.h"
 #include "Logger.h"
-#include "../LogBuckets/LogWindow.h"
+#include "../LogBuckets/LogViewRE.h"
 #include "../LogBuckets/FileBucket.h"
 
 // Server
@@ -83,7 +83,7 @@ private:
     static LogBucketEntry bucketCreators[] =
     {
       //{L"xml", &Server::CreateBucket<LogConfig>},
-      {L"window", &Server::CreateBucket<LogBucket::LogWindow>},
+      {L"window", &Server::CreateBucket<LogBucket::LogViewRE>},
       {L"file", &Server::CreateBucket<LogBucket::FileBucket>},
       {NULL, NULL}
     };

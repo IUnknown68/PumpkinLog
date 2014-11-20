@@ -35,6 +35,9 @@
     <ClInclude Include="LogBuckets\FileBucket.h">
       <Filter>LogBuckets</Filter>
     </ClInclude>
+    <ClInclude Include="LogBuckets\WindowManager.h">
+      <Filter>LogBuckets</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -58,6 +61,9 @@
       <Filter>LogBuckets</Filter>
     </ClCompile>
     <ClCompile Include="LogBuckets\FileBucket.cpp">
+      <Filter>LogBuckets</Filter>
+    </ClCompile>
+    <ClCompile Include="LogBuckets\WindowManager.cpp">
       <Filter>LogBuckets</Filter>
     </ClCompile>
   </ItemGroup>

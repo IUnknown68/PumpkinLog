@@ -89,7 +89,7 @@ STDMETHODIMP Server::getBucket(LPCWSTR aUri, ILogBucket ** aRetVal)
     }
 
     // find appropriate creator
-    TCreateBucket CreateBucket = &Server::CreateBucket<LogWindow>;
+    TCreateBucket CreateBucket = &Server::CreateBucket<LogViewRE>;
     for (LogBucketEntry * entry = GetBucketCreatorMap(); entry->CreateBucket; entry++) {
       if (0 == wcscmp(entry->name, schemeName)) {
         CreateBucket = entry->CreateBucket;

@@ -1,0 +1,1 @@
+- Ctrl+S for save etc - make sure all accelerators are present.

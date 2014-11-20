@@ -5,23 +5,20 @@
 #include "PumpkinLog.h"
 #include "Container.h"
 
-#include "LogViewRE.h"
-
 namespace PumpkinLog {
 namespace LogBucket {
-
-typedef LogViewRE LogView;
 
 class LogWindow :
   public CComObjectRootEx<CComSingleThreadModel>,
   public CFrameWindowImpl<LogWindow>,
   public CMessageFilter,
-  public ILogBucket
+  public ILogWindow
 {
 public:
   typedef CComObject<LogWindow>  _ComObject;
+  typedef CComPtr<ILogWindow>  _ComPtr;
 
-  LogWindow() : mLoggerRefcount(0)
+  LogWindow()
   {
   }
 
@@ -33,18 +30,18 @@ public:
   DECLARE_PROTECT_FINAL_CONSTRUCT()
 
   BEGIN_COM_MAP(LogWindow)
-    COM_INTERFACE_ENTRY(ILogBucket)
+    COM_INTERFACE_ENTRY(ILogWindow)
   END_COM_MAP()
 
   BEGIN_MSG_MAP(LogWindow)
     MESSAGE_HANDLER(WM_CREATE, OnCreate)
     MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
     MESSAGE_HANDLER(WM_CLOSE, OnClose)
-		COMMAND_ID_HANDLER(ID_EDIT_CLEAR_ALL, OnCmdClearLog)
 		COMMAND_ID_HANDLER(IDCLOSE, OnCmdClose)
 		COMMAND_ID_HANDLER(ID_APP_EXIT, OnCmdExit)
 		COMMAND_ID_HANDLER(ID_FILE_SAVE_AS, OnCmdFileSaveAs)
 		COMMAND_ID_HANDLER(ID_EDIT_COPY, OnCmdCopy)
+		COMMAND_RANGE_HANDLER(ID_WINDOW_TABFIRST, ID_WINDOW_TABLAST, OnWindowActivate)
     CHAIN_MSG_MAP(CFrameWindowImpl<LogWindow>)
   END_MSG_MAP()
 
@@ -56,26 +53,29 @@ public:
   LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
   LRESULT OnClose(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/);
 
-	LRESULT OnCmdClearLog(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 	LRESULT OnCmdClose(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 	LRESULT OnCmdExit(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 	LRESULT OnCmdFileSaveAs(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
 	LRESULT OnCmdCopy(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
+  LRESULT OnWindowActivate(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
+
 public:
-  STDMETHOD(init)(LPCWSTR aUri, ILogBucket * aContainer, ILogServerInternal * aLogServer);
-  STDMETHOD_(ULONG, addRefLogger)(LPCWSTR aName);
-  STDMETHOD_(ULONG, removeRefLogger)(LPCWSTR aName);
-  STDMETHOD(onLoggerLog)(LogFacility aFacility, LPCWSTR aName, SAFEARRAY * pVals, LPDISPATCH pOptions);
+  STDMETHOD(init)(LPCWSTR aName);
+  STDMETHOD(getHWND)(HWND * aRetVal);
+  STDMETHOD(addTab)(HWND aHWND, LPCWSTR aName);
+  STDMETHOD(removeTab)(HWND aHWND);
 
 private:
   void UpdateStatusbar();
   void BringToFront();
+  int FindTab(HWND aHWND);
+  ULONG GetLoggerRefCount();
 
 private:
-  ULONG mLoggerRefcount;
 	CCommandBarCtrl m_CmdBar;
   CMultiPaneStatusBarCtrl m_wndStatusBar;
-  LogView m_view;
+	CTabView m_view;
+  //LogView m_view;
   CComPtr<ILogServerInternal> mServer;
   CComPtr<ILogBucket> mContainer;
   CStringW  mName;

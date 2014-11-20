@@ -37,14 +37,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IntDir>$(Configuration)_$(PlatformName)\</IntDir>
-    <OutDir>$(SolutionDir)$(Configuration)_$(PlatformName)\</OutDir>
+    <IntDir>$(SolutionDir)build\$(ProjectName)\$(Configuration)_$(PlatformName)\</IntDir>
+    <OutDir>$(SolutionDir)deploy\$(Configuration)_$(PlatformName)\</OutDir>
     <LinkIncremental>true</LinkIncremental>
     <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IntDir>$(Configuration)_$(PlatformName)\</IntDir>
-    <OutDir>$(SolutionDir)$(Configuration)_$(PlatformName)\</OutDir>
+    <IntDir>$(SolutionDir)build\$(ProjectName)\$(Configuration)_$(PlatformName)\</IntDir>
+    <OutDir>$(SolutionDir)deploy\$(Configuration)_$(PlatformName)\</OutDir>
     <LinkIncremental>false</LinkIncremental>
     <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
   </PropertyGroup>
@@ -129,6 +129,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="LogBuckets\WindowManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -142,6 +143,7 @@
     <ClCompile Include="LogBuckets\LogWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="LogBuckets\WindowManager.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="core\Logger.h" />
