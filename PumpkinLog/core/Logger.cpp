@@ -44,22 +44,12 @@ HRESULT Logger::init(LPCWSTR aName, SAFEARRAY* aLogBucketURIs, ILogServerInterna
     for (ULONG i = 0; i < values.GetCount(); ++i) {
       // get URI i
       auto value = values.GetAt(i);
-      // ensure it is a string
-      CComVariant vtURI;
-      HRESULT hr = vtURI.ChangeType(VT_BSTR, &value);
-      if (FAILED(hr)) {
-        return DISP_E_TYPEMISMATCH;
+      // treat according to type: objects are supposed to be arrays
+      if (VT_DISPATCH == value.vt) {
+        IF_FAILED_RET_HR(addBucketsFromArray(value.pdispVal));
       }
-      std::wstring bucketUri = vtURI.bstrVal;
-
-      auto it = mBuckets.find(bucketUri);
-      if (it == mBuckets.end()) {
-        // not found: get from server
-        CComPtr<ILogBucket> container;
-        // ask server
-        IF_FAILED_RET_HR(mServer->getBucket(bucketUri.c_str(), &container));
-        mBuckets[bucketUri] = container;
-        container->addRefLogger(mName);
+      else {
+        IF_FAILED_RET_HR(addBucket(value));
       }
     }
     return S_OK;
@@ -68,6 +58,57 @@ HRESULT Logger::init(LPCWSTR aName, SAFEARRAY* aLogBucketURIs, ILogServerInterna
   values.Detach();
 
   return hr;
+}
+
+//----------------------------------------------------------------------------
+HRESULT Logger::addBucketsFromArray(IDispatch * aDispVal)
+{
+  Ajvar::Dispatch::Ex::ObjectGet ar(aDispVal);
+  if (!ar) {
+    return E_NOINTERFACE;
+  }
+  auto length = ar[L"length"];
+  if (VT_ERROR == length.vt) {
+    return DISP_E_NOTACOLLECTION;
+  }
+
+  HRESULT hr = length.ChangeType(VT_I4);
+  if (FAILED(hr)) {
+    return DISP_E_NOTACOLLECTION;
+  }
+
+  CStringW n;
+  for (long i = 0; i < length.lVal; i++) {
+    n.Format(L"%i", i);
+    auto value = ar[n];
+    if (VT_BSTR == value.vt) {
+      IF_FAILED_RET_HR(addBucket(value));
+    }
+  }
+  return S_OK;
+}
+
+//----------------------------------------------------------------------------
+HRESULT Logger::addBucket(const VARIANT & aVar)
+{
+  // ensure it is a string
+  CComVariant vtURI;
+  HRESULT hr = vtURI.ChangeType(VT_BSTR, &aVar);
+  if (FAILED(hr)) {
+    return DISP_E_TYPEMISMATCH;
+  }
+
+  std::wstring bucketUri(vtURI.bstrVal);
+  auto it = mBuckets.find(bucketUri);
+  if (it == mBuckets.end()) {
+    // not found: get from server
+    CComPtr<ILogBucket> container;
+    // ask server
+    IF_FAILED_RET_HR(mServer->getBucket(bucketUri.c_str(), &container));
+    mBuckets[bucketUri] = container;
+    container->addRefLogger(mName);
+  }
+  return S_OK;
 }
 
 //----------------------------------------------------------------------------

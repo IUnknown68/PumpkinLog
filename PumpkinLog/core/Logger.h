@@ -71,6 +71,8 @@ public:
 
 private:
   HRESULT doLog(LogFacility aFacility, SAFEARRAY * pVals, LPDISPATCH pOptions);
+  HRESULT addBucket(const VARIANT & aVar);
+  HRESULT addBucketsFromArray(IDispatch * aDispVal);
 
 private:
   typedef std::map<std::wstring, CComPtr<ILogBucket> > LogBucketMap;

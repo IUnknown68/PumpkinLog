@@ -155,6 +155,7 @@
     <ResourceCompile Include="PumpkinLog.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\test\test.js" />
     <None Include="PumpkinLog.rgs" />
     <None Include="Server.rgs" />
     <None Include="res\PumpkinLog.ico" />

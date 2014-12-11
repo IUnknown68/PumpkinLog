@@ -11,6 +11,9 @@
     <Filter Include="LogBuckets">
       <UniqueIdentifier>{147cb3aa-c180-4134-ab0f-247408d4d724}</UniqueIdentifier>
     </Filter>
+    <Filter Include="testfiles">
+      <UniqueIdentifier>{9dc926fb-4a00-4ad4-b5a1-2352e6fc9a26}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -78,6 +81,9 @@
     </None>
     <None Include="Server.rgs">
       <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\test\test.js">
+      <Filter>testfiles</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
