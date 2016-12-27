@@ -181,8 +181,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,1,0,0
- PRODUCTVERSION 0,1,0,0
+ FILEVERSION 0,2,0,0
+ PRODUCTVERSION 0,2,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -199,12 +199,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Seiberspace Arne Seib"
             VALUE "FileDescription", "PumpkinLog Module"
-            VALUE "FileVersion", "0.1.0.0"
+            VALUE "FileVersion", "0.2.0.0"
             VALUE "InternalName", "PumpkinLog"
             VALUE "LegalCopyright", "Copyright 2014 Arne Seib"
             VALUE "OriginalFilename", "PumpkinLog.exe"
             VALUE "ProductName", "PumpkinLog Module"
-            VALUE "ProductVersion", "0.1.0.0"
+            VALUE "ProductVersion", "0.2.0.0"
         END
     END
     BLOCK "VarFileInfo"
