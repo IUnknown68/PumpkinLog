@@ -1,0 +1,174 @@
+// PumpkinLog.idl : IDL source for PumpkinLog.exe
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (PumpkinLog.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+interface ILogServerInternal;
+
+[
+	object,
+	uuid(E034DA10-3781-40D4-8B3F-9A47700F3490),
+	dual,
+	nonextensible,
+	helpstring("ILoggerDispatch Interface. This interface is meant to be used from scripts."),
+	pointer_default(unique)
+]
+interface ILoggerDispatch : IDispatch
+{
+  [id(1), helpstring(
+    "Method llLog"
+  ), vararg]
+  HRESULT llLog([in] SAFEARRAY(VARIANT) pVals);
+
+  [id(2), helpstring(
+    "Method log"
+  ), vararg]
+  HRESULT log([in] SAFEARRAY(VARIANT) pVals);
+
+  [id(3), helpstring(
+    "Method debug"
+  ), vararg]
+  HRESULT debug([in] SAFEARRAY(VARIANT) pVals);
+
+  [id(4), helpstring(
+    "Method info"
+  ), vararg]
+  HRESULT info([in] SAFEARRAY(VARIANT) pVals);
+
+  [id(5), helpstring(
+    "Method warn"
+  ), vararg]
+  HRESULT warn([in] SAFEARRAY(VARIANT) pVals);
+
+  [id(6), helpstring(
+    "Method error"
+  ), vararg]
+  HRESULT error([in] SAFEARRAY(VARIANT) pVals);
+
+  [id(7), helpstring(
+    "Method loglow"
+  )]
+  HRESULT loglow([in] LONG nFacility, [in] LPDISPATCH pArVals);
+};
+
+[
+	uuid(23CCCB7C-3CF5-4A3F-97BA-73A28EAEDCE0),
+	version(1.0),
+	helpstring("PumpkinLog 1.0 Type Library")
+]
+library PumpkinLogLib
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+  [
+	  object,
+	  uuid(E2C38BBC-21CC-4071-8C37-FD2FC21CC5AF),
+	  helpstring("ILoggerDispatch Interface"),
+    oleautomation,
+	  pointer_default(unique)
+  ]
+  interface ILogger : IUnknown
+  {
+    HRESULT log1(VARIANT aVal1);
+    HRESULT debug1(VARIANT aVal1);
+    HRESULT info1(VARIANT aVal1);
+    HRESULT warn1(VARIANT aVal1);
+    HRESULT error1(VARIANT aVal1);
+
+    HRESULT log2(VARIANT aVal1, VARIANT aVal2);
+    HRESULT debug2(VARIANT aVal1, VARIANT aVal2);
+    HRESULT info2(VARIANT aVal1, VARIANT aVal2);
+    HRESULT warn2(VARIANT aVal1, VARIANT aVal2);
+    HRESULT error2(VARIANT aVal1, VARIANT aVal2);
+
+    HRESULT log3(VARIANT aVal1, VARIANT aVal2, VARIANT aVal3);
+    HRESULT debug3(VARIANT aVal1, VARIANT aVal2, VARIANT aVal3);
+    HRESULT info3(VARIANT aVal1, VARIANT aVal2, VARIANT aVal3);
+    HRESULT warn3(VARIANT aVal1, VARIANT aVal2, VARIANT aVal3);
+    HRESULT error3(VARIANT aVal1, VARIANT aVal2, VARIANT aVal3);
+
+    HRESULT log4(VARIANT aVal1, VARIANT aVal2, VARIANT aVal3, VARIANT aVal4);
+    HRESULT debug4(VARIANT aVal1, VARIANT aVal2, VARIANT aVal3, VARIANT aVal4);
+    HRESULT info4(VARIANT aVal1, VARIANT aVal2, VARIANT aVal3, VARIANT aVal4);
+    HRESULT warn4(VARIANT aVal1, VARIANT aVal2, VARIANT aVal3, VARIANT aVal4);
+    HRESULT error4(VARIANT aVal1, VARIANT aVal2, VARIANT aVal3, VARIANT aVal4);
+  };
+
+  [
+	  object,
+	  uuid(021A77D9-2B94-4E3E-8919-8C3729C13A27),
+	  dual,
+	  nonextensible,
+	  helpstring("IServer Interface"),
+	  pointer_default(unique)
+  ]
+  interface IServer : IDispatch
+  {
+    [id(1), helpstring("method createLogger"), vararg] HRESULT createLogger([in] BSTR aName, [in] SAFEARRAY(VARIANT) pVals, [out, retval] IDispatch ** aRetVal);
+  };
+
+  [
+	  uuid(55B9D045-A4C5-4BD3-828B-433505D5F953)
+  ]
+  typedef enum LogFacility
+  {
+    LT_INTERNAL = 0,
+    LT_LOG      = 1,
+    LT_DEBUG    = 2,
+    LT_INFO     = 3,
+    LT_WARN     = 4,
+    LT_ERROR    = 5,
+    LT_CUSTOM   = 1000
+  } LogFacility;
+
+  [
+	  object,
+	  uuid(CF69F643-A8D9-4155-8EA1-FB0EFD2985C5),
+	  helpstring("ILogBucket Interface"),
+	  pointer_default(unique)
+  ]
+  interface ILogBucket : IUnknown
+  {
+    HRESULT init([in] LPCWSTR aUri, [in] ILogBucket * aContainer, [in] ILogServerInternal * aLogServer);
+    ULONG addRefLogger([in] LPCWSTR aName);
+    ULONG removeRefLogger([in] LPCWSTR aName);
+    HRESULT onLoggerLog([in] LogFacility aFacility, [in] LPCWSTR aName, [in] SAFEARRAY * pVals, [in] LPDISPATCH pOptions);
+  };
+
+  [
+	  object,
+	  uuid(D3D815CB-965C-42C6-A0EF-FF9A6D71D476),
+	  helpstring("IServer Interface"),
+	  pointer_default(unique)
+  ]
+  interface ILogServerInternal : IUnknown
+  {
+    HRESULT onLoggerQuit([in] BSTR aName);
+    HRESULT getBucket([in] LPCWSTR aUri, [out, retval] ILogBucket ** aRetVal);
+    HRESULT onBucketGone([in] LPCWSTR aUri);
+  };
+
+
+	[
+		uuid(1D41AC82-70B0-4C33-9A1F-C4FFEF93AA55),
+		helpstring("PumpkinLog Server Class")
+	]
+	coclass Server
+	{
+		[default] interface IServer;
+	};
+
+	[
+		uuid(C643D408-593B-48B3-970B-52C08F554EF4),
+		helpstring("Logger Class")
+	]
+	coclass Logger
+	{
+		[default] interface ILoggerDispatch;
+	};
+};

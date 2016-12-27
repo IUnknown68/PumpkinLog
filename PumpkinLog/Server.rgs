@@ -1,0 +1,23 @@
+HKCR
+{
+	PumpkinLog.Server.1 = s 'PumpkinLog Server Class'
+	{
+		CLSID = s '{1D41AC82-70B0-4C33-9A1F-C4FFEF93AA55}'
+	}
+	PumpkinLog.Server = s 'PumpkinLog Server Class'
+	{
+		CLSID = s '{1D41AC82-70B0-4C33-9A1F-C4FFEF93AA55}'
+		CurVer = s 'PumpkinLog.Server.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {1D41AC82-70B0-4C33-9A1F-C4FFEF93AA55} = s 'PumpkinLog Server Class'
+		{
+			ProgID = s 'PumpkinLog.Server.1'
+			VersionIndependentProgID = s 'PumpkinLog.Server'
+			ForceRemove 'Programmable'
+			LocalServer32 = s '%MODULE%'
+			'TypeLib' = s '{23CCCB7C-3CF5-4A3F-97BA-73A28EAEDCE0}'
+		}
+	}
+}
