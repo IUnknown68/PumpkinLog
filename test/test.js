@@ -3,12 +3,12 @@ function UserInput( myPrompt ) {
   return WScript.StdIn.ReadLine();
 }
 
-var console = WScript.CreateObject("PumpkinLog.Server").createLogger("logger1", "window://default/");
-//var console = WScript.CreateObject("PumpkinLog.Server").createLogger("logger1", "window://default/", "file://U:\\Users\\Hans\\Documents\\Visual Studio 2010\\Projects\\PumpkinLog\\test.log");
+var console = WScript.CreateObject("PumpkinLog.Server").createLogger("logger1", ["window://default/", "file://U:\\Users\\Hans\\Documents\\Visual Studio 2012\\Projects\\PumpkinLog\\test.log"]);
+//var console = WScript.CreateObject("PumpkinLog.Server").createLogger("logger1", "window://default/", "file://U:\\Users\\Hans\\Documents\\Visual Studio 2012\\Projects\\PumpkinLog\\test.log");
 //var console = WScript.CreateObject("PumpkinLog.Server").createLogger("logger1", "http://3.arne.internal.salsitasoft.com/");
-//var console = WScript.CreateObject("PumpkinLog.Server").createLogger("logger1", "file://C:/Users/Arne/Documents/Visual Studio 2010/Projects/PumpkinLog/testlog.txt");
-//var console = WScript.CreateObject("PumpkinLog.Server").createLogger("logger1", "file://C:/Users/Arne/Documents/Visual Studio 2010/Projects/PumpkinLog/testlog.rtf");
-//var console = WScript.CreateObject("PumpkinLog.Server").createLogger("logger1", "config://C:/Users/Arne/Documents/Visual Studio 2010/Projects/PumpkinLog/logconfig.xml");
+//var console = WScript.CreateObject("PumpkinLog.Server").createLogger("logger1", "file://C:/Users/Arne/Documents/Visual Studio 2012/Projects/PumpkinLog/testlog.txt");
+//var console = WScript.CreateObject("PumpkinLog.Server").createLogger("logger1", "file://C:/Users/Arne/Documents/Visual Studio 2012/Projects/PumpkinLog/testlog.rtf");
+//var console = WScript.CreateObject("PumpkinLog.Server").createLogger("logger1", "config://C:/Users/Arne/Documents/Visual Studio 2012/Projects/PumpkinLog/logconfig.xml");
 
 //console.info("Wait for input");
 //var s = UserInput('Enter something');

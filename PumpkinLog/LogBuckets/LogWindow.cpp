@@ -164,6 +164,9 @@ STDMETHODIMP_(ULONG) LogWindow::addRefLogger(LPCWSTR aName)
   CStringW s;
   s.Format(L"Client \"%s\" connected. Have %i clients now.", aName, mLoggerRefcount);
   ar[0] = s;
+  if (1 == mLoggerRefcount) {
+    m_view.ClearLog();
+  }
   m_view.Log(LT_INTERNAL, aName, ar, nullptr);
   return mLoggerRefcount;
 }
